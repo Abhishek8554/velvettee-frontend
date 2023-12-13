@@ -1,0 +1,315 @@
+.hero-section {
+  width: 100%;
+  max-width: 1920px;
+  background: #eae9f2;
+  height: 100%;
+
+  header {
+    background-color: var(--primary-color);
+    height: 100px;
+    nav {
+      margin: 0 auto;
+      max-width: 1300px;
+      width: 100%;
+      border: 1px solid black;
+
+      .search-bar {
+        width: 283px;
+        display: flex;
+        width: 283px;
+        padding: 13px 20px;
+        align-items: center;
+        gap: 11px;
+      }
+    }
+  }
+  .products-section{
+    padding: 20px 0;
+  }
+  .top-deals {
+    align-self: center;
+    color: #333b52;
+    font-family: Montserrat;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+  .explore-all-button {
+    border-radius: 5px;
+    padding: 10px 20px;
+    border: 1px solid #291655;
+    color: #333b52;
+    font-family: Open Sans;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    span{
+      font-size: 22px;
+      font-weight: bold;
+    }
+  }
+
+  .banner-section {
+    width: 100%;
+    height: 350px;
+    display: inline-flex;
+    // padding: 0px 110.489px 0px 56.397px;
+    align-items: center;
+    background: #ef3136;
+    margin: 35px 0;
+
+    .banner {
+      width: 80%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .banner-left {
+        width: 55%;
+      }
+
+      .banner-right {
+        width: 45%;
+
+        .banner-description {
+          h3 {
+            color: #fff;
+            font-family: Montserrat;
+            // font-size: 110px;
+            font-size: 79px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+          }
+          p {
+            padding: 18px 0;
+            color: #fff;
+            font-family: Montserrat;
+            // font-size: 21px;
+            font-size: 18px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            max-width: 380px;
+          }
+        }
+      }
+    }
+  }
+}
+footer {
+  width: 100%;
+  height: 640px;
+  background: #291655;
+  .footer-wrapper {
+    width: 100%;
+    margin: 0 auto;
+    .footer-section {
+      position: relative;
+      height: 550px;
+      .footer-logo-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        .footer-logo {
+          margin: 30px;
+          width: 5%;
+        }
+        .company-name {
+          color: var(--Light-Shade, #faf9f9);
+          font-family: Montserrat;
+          font-size: 29.075px;
+          font-style: normal;
+          font-weight: 700;
+          line-height: 45.862px; /* 157.738% */
+          letter-spacing: 4.361px;
+        }
+        .company-address {
+          color: var(--Light-Shade, #faf9f9);
+          font-family: Montserrat;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 34px;
+          margin: 18px;
+        }
+      }
+      .footer-nav {
+        margin: 45px 0;
+      }
+
+      .footer-nav-items {
+        cursor: pointer;
+        color: #faf9f9;
+        font-family: Montserrat;
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 47.944px;
+      }
+
+      .social-icons {
+        width: 220px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 8%;
+
+        img {
+          cursor: pointer;
+        }
+      }
+    }
+    .copy-right-section {
+      border-top: 1px solid #faf9f9;
+      width: 100%;
+      height: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: rgba(250, 249, 249, 0.68);
+      // font-size: 24px;
+      font-size: 20.5px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 47.944px;
+    }
+  }
+}
+
+@media screen and  (max-width: 1110px){
+  .banner{
+    width: 90% !important;
+  }
+  .hero-section .banner-section .banner .banner-right .banner-description {
+    h3 {
+      font-size: 68px !important;
+    }
+    p {
+      font-size: 15px !important;
+    }
+  }
+}
+@media screen and  (max-width: 900px){
+  .banner{
+    width: 100% !important;
+  }
+  .banner-left{
+    scale: 0.9;
+  }
+  .hero-section .banner-section .banner .banner-right .banner-description {
+    h3 {
+      font-size: 62px !important;
+    }
+    p {
+      font-size: 13px !important;
+    }
+  }
+
+  .footer-nav{
+    ul{
+      width: 60%;
+    }
+  }
+}
+@media screen and (max-width: 769px) {
+  .top-deals{
+    font-size: 35px !important;
+  }
+  .explore-all-button{
+    font-size: 14px !important;
+  }
+  .hero-section .banner-section .banner .banner-right .banner-description {
+    h3 {
+      font-size: 58px !important;
+    }
+    p {
+      font-size: 10px !important;
+    }
+  }
+  .footer-nav{
+    ul{
+      width: 80%;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .hero-section .banner-section .banner .banner-right .banner-description {
+    h3 {
+      font-size: 54px !important;
+    }
+    p {
+      font-size: 8px !important;
+    }
+  }
+  footer{
+    height: 550px;
+  }
+  .footer-section{
+    height: 475px !important;
+  }
+  .copy-right-section{
+    height: 60px !important;
+    font-size: 16px !important;
+  }
+  .footer-logo{
+    width: 8% !important;
+  }
+  .company-name{
+    font-size: 25px !important;
+  }
+  .company-address{
+    font-size: 13px !important;
+  }
+  .footer-nav{
+    ul{
+      font-size: 15px !important;
+    }
+  }
+}
+@media screen and (max-width: 500px) {
+  .top-deals{
+    font-size: 18px !important;
+  }
+  .explore-all-button{
+    font-size: 10px !important;
+  }
+  .banner-section{
+    height: 235px !important;
+  }
+  .hero-section .banner-section .banner .banner-right .banner-description {
+    h3 {
+      font-size: 42px !important;
+    }
+    p {
+      font-size: 6px !important;
+    }
+  }
+  .footer-nav{
+    ul{
+      width: 90%;
+      font-size: 13px !important;
+    }
+  }
+  .copy-right-section{
+    height: 60px !important;
+    font-size: 16px !important;
+  }
+  .footer-logo{
+    width: 8% !important;
+  }
+  .company-name{
+    font-size: 22px !important;
+  }
+  .company-address{
+    font-size: 10px !important;
+  }
+}
