@@ -1,2 +1,18 @@
 @import './scss/base/base-dir';
 @import './scss/abstracts/abstracts-dir';
+
+/* Mat Menu styles */
+.MuiPaper-root {
+    border: 0.5px solid var(--border-color);
+    box-shadow: unset !important;
+    margin-top: 10px;
+}
+.MuiList-root {
+    color: var(--primary-color);
+}
+.MuiMenuItem-root {
+    font-size: 1.25rem;
+}
+.MuiMenuItem-root:hover {
+    background-color: rgb(114 46 204 / 14%) !important;
+}

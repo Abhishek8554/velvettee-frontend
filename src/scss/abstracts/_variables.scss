@@ -1,6 +1,6 @@
 :root {
     // Brand Colors
-    --primary-color: #c00000;
+    --primary-color: #722ecc;
     --secondary-color: #262626;
 
     // State Colors
@@ -12,10 +12,22 @@
     // Text Colors
     --button-text-color: #291655;
     --text-color: #1f1f1f;
+    --text-color-invert: #fff;
     --sub-text-color: #696871;
 
     // Background Colors
     --black-bg-color: #1f1f1f;
     --white-bg-color: #fff;
     --light-bg-color: #eae9f2;
+
+    // Border Colors
+    --border-color: #999;
+}
+
+/* Utility classes */
+.color-primary {
+    color: var(--primary-color);
+}
+.color-sub-text {
+    color: var(--sub-text-color);
 }

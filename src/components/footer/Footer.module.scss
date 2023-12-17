@@ -1,0 +1,167 @@
+.wrapper {
+    font-family: var(--font-family);
+    /* height: 60vh; */
+    background: #291655;
+    color: white;
+    padding-bottom: 2.5em;
+}
+.top {
+    padding: 4em;
+    padding-bottom: 0;
+}
+.company_logo {
+    margin: 0 auto;
+    width: fit-content;
+    /* height: fit; */
+}
+.icon_container {
+    width: fit-content;
+    margin: 0 auto;
+}
+.brand_name {
+    font-weight: 700;
+    font-size: 3.6rem;
+    letter-spacing: 0.5;
+}
+
+.address {
+    text-align: center;
+    font-size: 2.6rem;
+    margin-top: 25px;
+}
+
+.links_container {
+    display: flex;
+    margin: 0 auto;
+    width: fit-content;
+    margin-top: 30px;
+    gap: 1.5em;
+    font-size: 2.6rem;
+    li {
+        cursor: pointer;
+    }
+}
+
+.social_links {
+    display: flex;
+    margin: 0 auto;
+    width: fit-content;
+    margin-top: 70px;
+    gap: 1.5em;
+    font-size: 2.6rem;
+    .icon {
+        cursor: pointer;
+    }
+}
+
+.divide {
+    height: 1px;
+    background-color: #fff;
+    /* width: 100%; */
+    margin-top: 2.5em;
+    margin-bottom: 2.5em;
+}
+
+.copyright {
+    margin: 0 auto;
+    width: fit-content;
+    font-size: 2.6rem;
+}
+
+@media screen and (max-width: 1460px) {
+    .top {
+        padding: 2em;
+        padding-bottom: 0;
+    }
+    .icon_container {
+        width: 4em;
+        height: 4em;
+        i {
+            width: inherit;
+            height: inherit;
+            svg {
+                width: inherit;
+                height: inherit;
+            }
+        }
+    }
+    .brand_name {
+        font-size: 2rem;
+    }
+    .address {
+        font-size: 1.5rem;
+    }
+    .links_container {
+        gap: 1rem;
+        font-size: 1.5rem;
+    }
+    .social_links {
+        margin-top: 30px;
+        gap: 1.3rem;
+        .icon {
+            height: 35px;
+            width: 35px;
+            svg {
+                height: inherit;
+                width: inherit;
+            }
+        }
+    }
+    .divide {
+        margin: 1.5rem 0;
+    }
+    .copyright {
+        font-size: 1rem;
+    }
+    .wrapper {
+        padding-bottom: 2rem;
+    }
+}
+
+@media screen and (max-width: 680px) {
+    .top {
+        padding: 1.5em;
+        padding-bottom: 0;
+    }
+    .icon_container {
+        width: 3em;
+        height: 3em;
+    }
+    .brand_name {
+        font-size: 1.5rem;
+    }
+    .address {
+        font-size: 1rem;
+    }
+    .links_container {
+        gap: 1rem;
+        font-size: 1rem;
+    }
+    .social_links {
+        margin-top: 30px;
+        gap: 1rem;
+        .icon {
+            height: 25px;
+            width: 25px;
+            svg {
+                height: inherit;
+                width: inherit;
+            }
+        }
+    }
+    .divide {
+        margin: 1rem 0;
+    }
+    .copyright {
+        font-size: 0.7rem;
+    }
+    .wrapper {
+        padding-bottom: 1.5rem;
+    }
+}
+@media screen and (max-width: 415px) {
+    .links_container {
+        font-size: 0.8rem;
+        gap: 0.5rem;
+    }
+}
