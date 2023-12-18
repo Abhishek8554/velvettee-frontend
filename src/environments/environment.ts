@@ -5,5 +5,5 @@
 // Staging =
 
 export const environment = {
-    baseUrl: '',
+  baseUrl: "http://localhost:4001/api",
 };
