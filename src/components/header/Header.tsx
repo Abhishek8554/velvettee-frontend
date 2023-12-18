@@ -9,6 +9,7 @@ import {
     MagnifyingGlassIcon,
 } from '@heroicons/react/20/solid';
 import { UserCircleIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
+import { Link } from 'react-router-dom';
 const Header = () => {
     const [menAnchorEl, setMenAnchorEl] = React.useState<null | HTMLElement>(
         null
@@ -133,19 +134,19 @@ const Header = () => {
                     />
                 </div>
                 <div className={styles.buttons_container}>
-                    <a href="#" className={styles.button}>
+                    <Link to="/login" className={styles.button}>
                         <span>
                             <UserCircleIcon />
                         </span>
                         <p>Login</p>
-                    </a>
+                    </Link>
 
-                    <a href="#" className={styles.button}>
+                    <Link to="/cart" className={styles.button}>
                         <span>
                             <ShoppingCartIcon />
                         </span>
                         <p>Cart</p>
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>
