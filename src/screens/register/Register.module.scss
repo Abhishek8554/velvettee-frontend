@@ -1,0 +1,33 @@
+.wrapper {
+    background: var(--primary-color)
+        url('/public/login-assets/Background_Image.svg');
+    background-size: cover;
+    position: relative;
+}
+
+
+.card_container {
+    width: 382px;
+}
+
+.boy_character_wrapper,
+.girl_character_wrapper {
+    position: absolute;
+    bottom: 0;
+    width: 25vmin;
+    min-width: 120px;
+}
+
+.boy_character_wrapper {
+    left: 0;
+}
+.girl_character_wrapper {
+    right: 0;
+}
+
+@media screen and (max-width: 686px) {
+    .boy_character_wrapper,
+    .girl_character_wrapper {
+        width: 20vmin;
+    }
+}
