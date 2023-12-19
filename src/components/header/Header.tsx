@@ -39,9 +39,13 @@ const Header = () => {
     const mensMenuItems: string[] = ['Shirt', 'T-Shirts', 'Jeans', 'Pants'];
     return (
         <div className={styles.wrapper}>
-            <div className={styles.icon_container}>
-                <i dangerouslySetInnerHTML={{ __html: Icon.companyLogo }}></i>
-            </div>
+            <Link to={'/'}>
+                <div className={styles.icon_container}>
+                    <i
+                        dangerouslySetInnerHTML={{ __html: Icon.companyLogo }}
+                    ></i>
+                </div>
+            </Link>
             <div className={styles.actions_container}>
                 <div className={styles.dropdown}>
                     <div

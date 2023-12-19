@@ -27,7 +27,7 @@ h1 {
 }
 
 .default-error-border {
-    border-color: var(--danger-color);
+    border: 1px solid var(--danger-color);
 }
 
 .ve-terms {
@@ -35,20 +35,36 @@ h1 {
     line-height: 1rem;
 }
 
-.otp-field[type="number"] {
+.otp-field[type='number'] {
     text-align: center;
 }
 
+.field {
+    border: 1px solid #e5e7eb;
+}
+
+/* RESET INPUT OUTLINE */
+input {
+    outline: none;
+}
 // Pre sets
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 /* Firefox */
-input[type=number] {
-  -moz-appearance: textfield;
+input[type='number'] {
+    -moz-appearance: textfield;
+}
+
+/* Change the white to any color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
 }

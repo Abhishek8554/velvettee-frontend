@@ -9,6 +9,8 @@ import useAuthStore from '../../stores/Auth';
 import useSnackBar from '../../stores/Snackbar';
 import { Link } from 'react-router-dom';
 import { SnackBarTypes } from '../../enums/SnackBarTypes';
+import { EyeIcon } from '@heroicons/react/24/outline';
+import { useState } from 'react';
 
 interface Values {
     email: string;
@@ -16,6 +18,9 @@ interface Values {
 }
 
 export default function Login() {
+    const [showPassword, setShowPassword] = useState<{
+        [name: string]: boolean;
+    }>({});
     const { setToken } = useAuthStore();
     const snackBarService = useSnackBar();
 
@@ -86,17 +91,68 @@ export default function Login() {
                             </div>
 
                             <div className="mb-4">
-                                <Field
-                                    type="password"
-                                    id="password"
-                                    name="password"
-                                    placeholder="Enter your password"
-                                    className={`mt-1 p-2 w-full border rounded-md ve-field ${
+                                <div
+                                    className={`mt-1 p-2 w-full border rounded-md ve-field  ${
+                                        styles.password_wrapper
+                                    } ${
                                         errors.password
                                             ? 'default-error-border'
-                                            : ''
+                                            : 'field'
                                     }`}
-                                />
+                                >
+                                    <Field
+                                        type={
+                                            showPassword['password']
+                                                ? 'text'
+                                                : 'password'
+                                        }
+                                        id="password"
+                                        name="password"
+                                        placeholder="Enter your password"
+                                        className="flex-1"
+                                    />
+                                    <div className={styles.eye_wrapper}>
+                                        <EyeIcon
+                                            onClick={() => {
+                                                setShowPassword((pre) => {
+                                                    return {
+                                                        ...(pre as {
+                                                            [
+                                                                name: string
+                                                            ]: boolean;
+                                                        }),
+                                                        'password':
+                                                            !showPassword[
+                                                                'password'
+                                                            ],
+                                                    };
+                                                });
+                                            }}
+                                        />
+                                        <span
+                                            className={`${styles.eye_icon} ${
+                                                showPassword['password']
+                                                    ? styles.close
+                                                    : 'd-none'
+                                            }`}
+                                            onClick={() => {
+                                                setShowPassword((pre) => {
+                                                    return {
+                                                        ...(pre as {
+                                                            [
+                                                                name: string
+                                                            ]: boolean;
+                                                        }),
+                                                        'password':
+                                                            !showPassword[
+                                                                'password'
+                                                            ],
+                                                    };
+                                                });
+                                            }}
+                                        ></span>
+                                    </div>
+                                </div>
                                 <ErrorMessage
                                     name="password"
                                     component="div"
@@ -116,7 +172,10 @@ export default function Login() {
                                 </label>
 
                                 <div className="color-primary underline font-medium">
-                                    <a href="/"> Forgot Password ?</a>
+                                    <Link to="/forgot-password">
+                                        {' '}
+                                        Forgot Password ?
+                                    </Link>
                                 </div>
                             </div>
 
