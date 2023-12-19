@@ -33,7 +33,7 @@ class HitApi {
             })
             .catch((error) => {
                 if (this.args.errorCallback) {
-                    this.args.errorCallback(error);
+                    this.args.errorCallback(error.response.data);
                 }
             });
     }

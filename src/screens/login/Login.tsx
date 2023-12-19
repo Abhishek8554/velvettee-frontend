@@ -6,6 +6,9 @@ import Button from '../../components/Button';
 import HitApi from '../../classes/HitApi';
 import { RequestType } from '../../enums/RequestType';
 import useAuthStore from '../../stores/Auth';
+import useSnackBar from '../../stores/Snackbar';
+import { Link } from 'react-router-dom';
+import { SnackBarTypes } from '../../enums/SnackBarTypes';
 
 interface Values {
     email: string;
@@ -14,6 +17,7 @@ interface Values {
 
 export default function Login() {
     const { setToken } = useAuthStore();
+    const snackBarService = useSnackBar();
 
     const initialValues: Values = {
         email: '',
@@ -28,8 +32,6 @@ export default function Login() {
     });
 
     const handleSubmit = (values: Values) => {
-        console.log(values);
-
         new HitApi({
             requestType: RequestType.POST,
             url: '/login',
@@ -41,7 +43,7 @@ export default function Login() {
                 setToken(res.token as string);
             },
             errorCallback: (err) => {
-                console.log(err);
+                snackBarService.open(err.message, SnackBarTypes.DANGER);
             },
         }).hitApi();
     };
@@ -134,12 +136,12 @@ export default function Login() {
 
                             <div className="flex justify-center">
                                 Don’t have an account? &nbsp;
-                                <a
+                                <Link
                                     className="color-primary underline font-medium"
-                                    href="/"
+                                    to="/register"
                                 >
                                     Signup
-                                </a>
+                                </Link>
                             </div>
                         </Form>
                     )}
