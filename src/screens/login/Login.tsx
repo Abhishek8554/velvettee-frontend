@@ -138,7 +138,7 @@ export default function Login() {
                                 Don’t have an account? &nbsp;
                                 <Link
                                     className="color-primary underline font-medium"
-                                    to="/register"
+                                    to="/signup"
                                 >
                                     Signup
                                 </Link>

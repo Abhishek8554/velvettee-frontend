@@ -34,3 +34,21 @@ h1 {
     font-size: 0.68rem;
     line-height: 1rem;
 }
+
+.otp-field[type="number"] {
+    text-align: center;
+}
+
+// Pre sets
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
