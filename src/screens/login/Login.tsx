@@ -3,14 +3,13 @@ import styles from './Login.module.scss';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Button from '../../components/Button';
-import HitApi from '../../classes/HitApi';
-import { RequestType } from '../../enums/RequestType';
 import useAuthStore from '../../stores/Auth';
 import useSnackBar from '../../stores/Snackbar';
 import { Link } from 'react-router-dom';
 import { SnackBarTypes } from '../../enums/SnackBarTypes';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import useApi from '../../hooks/useApi';
 
 interface Values {
     email: string;
@@ -18,9 +17,11 @@ interface Values {
 }
 
 export default function Login() {
+    const api = useApi();
     const [showPassword, setShowPassword] = useState<{
         [name: string]: boolean;
     }>({});
+    const [loader, setLoader] = useState(false);
     const { setToken } = useAuthStore();
     const snackBarService = useSnackBar();
 
@@ -37,20 +38,17 @@ export default function Login() {
     });
 
     const handleSubmit = (values: Values) => {
-        new HitApi({
-            requestType: RequestType.POST,
-            url: '/login',
-            payload: {
-                email: values.email,
-                password: values.password,
-            },
-            successCallback: (res) => {
-                setToken(res.token as string);
-            },
-            errorCallback: (err) => {
+        setLoader(true);
+        api.post('/login', { email: values.email, password: values.password })
+            .then((res) => {
+                setToken(res.data.token);
+                snackBarService.open('Login Successfull');
+                setLoader(false);
+            })
+            .catch((err) => {
                 snackBarService.open(err.message, SnackBarTypes.DANGER);
-            },
-        }).hitApi();
+                setLoader(false);
+            });
     };
 
     return (
@@ -190,7 +188,7 @@ export default function Login() {
                             </div>
 
                             <div className="mt-12 mb-4">
-                                <Button text="Login"></Button>
+                                <Button loader={loader} text="Login"></Button>
                             </div>
 
                             <div className="flex justify-center">

@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import './App.scss';
 import Register from './screens/register/Register';
 import Login from './screens/login/Login';
-import LandingPage from './pages/landing-page/LandingPage';
+import LandingPage from './screens/landing-page/LandingPage';
 import ForgotPassword from './screens/ForgotPassword';
 import { ThemeProvider, createTheme } from '@mui/material';
 import Snackbar from './components/snackbar/Snackbar';

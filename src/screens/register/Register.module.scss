@@ -5,7 +5,6 @@
     position: relative;
 }
 
-
 .card_container {
     width: 382px;
 }
@@ -30,4 +29,25 @@
     .girl_character_wrapper {
         width: 20vmin;
     }
+}
+
+.password_wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.eye_wrapper {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    position: relative;
+}
+.close {
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    background-color: black;
+    top: 0;
+    left: 50%;
+    transform: rotate(-45deg);
 }
