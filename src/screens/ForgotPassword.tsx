@@ -380,7 +380,6 @@ export default function ForgotPassword() {
                                             className="text-sm mt-1 default-error"
                                         />
                                     </div>
-
                                     <div className="mb-4">
                                         <div
                                             className={`mt-1 p-2 w-full border rounded-md ve-field  ${
@@ -393,12 +392,12 @@ export default function ForgotPassword() {
                                         >
                                             <Field
                                                 type={
-                                                    showPassword['cnf-password']
+                                                    showPassword['cnfPassword']
                                                         ? 'text'
                                                         : 'password'
                                                 }
-                                                id="cnf-password"
-                                                name="cnf-password"
+                                                id="cnfPassword"
+                                                name="cnfPassword"
                                                 placeholder="Confirm your password"
                                                 className="flex-1"
                                             />
@@ -413,9 +412,9 @@ export default function ForgotPassword() {
                                                                             name: string
                                                                         ]: boolean;
                                                                     }),
-                                                                    'cnf-password':
+                                                                    'cnfPassword':
                                                                         !showPassword[
-                                                                            'cnf-password'
+                                                                            'cnfPassword'
                                                                         ],
                                                                 };
                                                             }
@@ -427,7 +426,7 @@ export default function ForgotPassword() {
                                                         styles.eye_icon
                                                     } ${
                                                         showPassword[
-                                                            'cnf-password'
+                                                            'cnfPassword'
                                                         ]
                                                             ? styles.close
                                                             : 'd-none'
@@ -441,9 +440,9 @@ export default function ForgotPassword() {
                                                                             name: string
                                                                         ]: boolean;
                                                                     }),
-                                                                    'cnf-password':
+                                                                    'cnfPassword':
                                                                         !showPassword[
-                                                                            'cnf-password'
+                                                                            'cnfPassword'
                                                                         ],
                                                                 };
                                                             }
@@ -453,16 +452,14 @@ export default function ForgotPassword() {
                                             </div>
                                         </div>
                                         <ErrorMessage
-                                            name="cnf-password"
+                                            name="cnfPassword"
                                             component="div"
                                             className="text-sm mt-1 default-error"
                                         />
                                     </div>
-
                                     <div className="mt-12 mb-4">
                                         <Button text="Save"></Button>
                                     </div>
-
                                     <div className="flex justify-center">
                                         <Link
                                             to="/login"

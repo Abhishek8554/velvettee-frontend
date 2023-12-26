@@ -40,16 +40,16 @@ const LandingPage = () => {
                     }}
                 >
                     <div className={styles.carousel_item}>
-                        <img src="/public/MicrosoftTeams-image.png" />
+                        <img src="/public/carouselImage.svg" />
                     </div>
                     <div className={styles.carousel_item}>
-                        <img src="/public/MicrosoftTeams-image.png" />
+                        <img src="/public/carouselImage.svg" />
                     </div>
                     <div className={styles.carousel_item}>
-                        <img src="/public/MicrosoftTeams-image.png" />
+                        <img src="/public/carouselImage.svg" />
                     </div>
                     <div className={styles.carousel_item}>
-                        <img src="/public/MicrosoftTeams-image.png" />
+                        <img src="/public/carouselImage.svg" />
                     </div>
                 </Carousel>
             </section>
