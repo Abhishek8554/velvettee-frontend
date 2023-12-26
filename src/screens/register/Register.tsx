@@ -10,6 +10,7 @@ import Button from '../../components/Button';
 import { useState } from 'react';
 import useApi from '../../hooks/useApi';
 import { EyeIcon } from '@heroicons/react/24/outline';
+import useLoader from '../../stores/FullPageLoader';
 
 interface Values {
     email: string;
@@ -20,11 +21,11 @@ interface Values {
 export default function Register() {
     const { setToken } = useAuthStore();
     const snackBarService = useSnackBar();
-    const [loader, setLoader] = useState(false);
     const [showPassword, setShowPassword] = useState<{
         [name: string]: boolean;
     }>({});
     const api = useApi();
+    const loaderService = useLoader();
 
     const initialValues: Values = {
         email: '',
@@ -44,19 +45,19 @@ export default function Register() {
     });
 
     const handleSubmit = (values: Values) => {
-        setLoader(true);
+        loaderService.showFullPageLoader();
         api.post('/register', {
             email: values.email,
             password: values.password,
         })
             .then((res) => {
                 setToken(res.data.token as string);
-                setLoader(false);
+                loaderService.hideFullPageLoader();
                 snackBarService.open('Register Successfull');
             })
             .catch((err) => {
                 snackBarService.open(err.message, SnackBarTypes.DANGER);
-                setLoader(false);
+                loaderService.hideFullPageLoader();
             });
     };
 
@@ -243,10 +244,7 @@ export default function Register() {
                                 </div>
 
                                 <div className="mt-12 mb-4">
-                                    <Button
-                                        text="Signup"
-                                        loader={loader}
-                                    ></Button>
+                                    <Button text="Signup"></Button>
                                 </div>
 
                                 <div className="flex justify-center">

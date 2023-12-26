@@ -8,6 +8,8 @@ import styles from '../screens/login/Login.module.scss';
 import useApi from '../hooks/useApi';
 import useSnackBar from '../stores/Snackbar';
 import { SnackBarTypes } from '../enums/SnackBarTypes';
+import { EyeIcon } from '@heroicons/react/24/outline';
+import useLoader from '../stores/FullPageLoader';
 
 interface ForgotPasswordFormFields {
     email: string;
@@ -28,13 +30,15 @@ interface OtpValues {
 }
 
 export default function ForgotPassword() {
-    const [loader, setLoader] = useState<boolean>(false);
     const [forgotPasswordStage, setForgotPasswordStage] = useState<number>(1);
     const [forgotPasswordFormValue, setForgotPasswordFormValue] =
         useState<ForgotPasswordFormFields>({ email: '' });
-
+    const [showPassword, setShowPassword] = useState<{
+        [name: string]: boolean;
+    }>({});
     const snackBarService = useSnackBar();
     const api = useApi();
+    const loaderService = useLoader();
     const [otpFormFields, setOtpFormFields] = useState<OtpValues>({
         value1: '',
         value2: '',
@@ -64,42 +68,21 @@ export default function ForgotPassword() {
 
     const handleSubmitSendEmail = (values: ForgotPasswordFormFields) => {
         setForgotPasswordFormValue(values);
-        setLoader(true);
+        loaderService.showFullPageLoader();
         api.post('/forgot-password', { email: values.email })
             .then(() => {
                 setForgotPasswordStage(2);
-                setLoader(false);
+                loaderService.hideFullPageLoader();
             })
             .catch((err) => {
-                setLoader(false);
+                loaderService.hideFullPageLoader();
                 snackBarService.open(err.message, SnackBarTypes.DANGER);
             });
     };
 
     const handleSubmitOtpValue = () => {
-        setLoader(true);
+        loaderService.showFullPageLoader();
         api.post('/verify-otp', {
-            otp:
-                otpFormFields.value1 +
-                otpFormFields.value2 +
-                otpFormFields.value3 +
-                otpFormFields.value4 +
-                otpFormFields.value5,
-            // email: forgotPasswordFormValue.email,
-        })
-            .then(() => {
-                setLoader(false);
-            })
-            .catch((err) => {
-                snackBarService.open(err.message, SnackBarTypes.DANGER);
-                setLoader(false);
-            });
-    };
-
-    const handleSubmitPassword = () => {
-        setLoader(true);
-
-        api.post('/forgot-password', {
             otp:
                 otpFormFields.value1 +
                 otpFormFields.value2 +
@@ -109,11 +92,32 @@ export default function ForgotPassword() {
             email: forgotPasswordFormValue.email,
         })
             .then(() => {
-                setLoader(false);
+                loaderService.hideFullPageLoader();
+                snackBarService.open('OTP verification successfull');
+                setForgotPasswordStage(3);
+            })
+            .catch((err) => {
+                snackBarService.open(err.message, SnackBarTypes.DANGER);
+                loaderService.hideFullPageLoader();
+            });
+    };
+
+    const handleSubmitPassword = (values: {
+        cnfPassword: string;
+        password: string;
+    }) => {
+        console.log(1);
+        loaderService.showFullPageLoader();
+        api.post('/reset-password', {
+            email: forgotPasswordFormValue.email,
+            password: values.password,
+        })
+            .then(() => {
+                loaderService.hideFullPageLoader();
                 snackBarService.open('Welcome');
             })
             .catch((err) => {
-                setLoader(false);
+                loaderService.hideFullPageLoader();
                 snackBarService.open(err.message, SnackBarTypes.DANGER);
             });
     };
@@ -202,10 +206,7 @@ export default function ForgotPassword() {
                                 </div>
 
                                 <div className="mt-12 mb-4">
-                                    <Button
-                                        loader={loader}
-                                        text="Submit"
-                                    ></Button>
+                                    <Button text="Submit"></Button>
                                 </div>
 
                                 <div className="flex justify-center">
@@ -274,10 +275,7 @@ export default function ForgotPassword() {
                                 </div>
 
                                 <div className="mt-12 mb-4">
-                                    <Button
-                                        loader={loader}
-                                        text="Submit"
-                                    ></Button>
+                                    <Button text="Submit"></Button>
                                 </div>
 
                                 <div className="flex justify-center">
@@ -308,17 +306,74 @@ export default function ForgotPassword() {
                             {({ errors }) => (
                                 <Form className="max-w-md mx-auto mt-8 bg-white sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl">
                                     <div className="mb-4">
-                                        <Field
-                                            type="password"
-                                            id="password"
-                                            name="password"
-                                            placeholder="Enter your password"
-                                            className={`mt-1 p-2 w-full border rounded-md ve-field ${
+                                        <div
+                                            className={`mt-1 p-2 w-full border rounded-md ve-field  ${
+                                                styles.password_wrapper
+                                            } ${
                                                 errors.password
                                                     ? 'default-error-border'
-                                                    : ''
+                                                    : 'field'
                                             }`}
-                                        />
+                                        >
+                                            <Field
+                                                type={
+                                                    showPassword['password']
+                                                        ? 'text'
+                                                        : 'password'
+                                                }
+                                                id="password"
+                                                name="password"
+                                                placeholder="Enter your password"
+                                                className="flex-1"
+                                            />
+                                            <div className={styles.eye_wrapper}>
+                                                <EyeIcon
+                                                    onClick={() => {
+                                                        setShowPassword(
+                                                            (pre) => {
+                                                                return {
+                                                                    ...(pre as {
+                                                                        [
+                                                                            name: string
+                                                                        ]: boolean;
+                                                                    }),
+                                                                    'password':
+                                                                        !showPassword[
+                                                                            'password'
+                                                                        ],
+                                                                };
+                                                            }
+                                                        );
+                                                    }}
+                                                />
+                                                <span
+                                                    className={`${
+                                                        styles.eye_icon
+                                                    } ${
+                                                        showPassword['password']
+                                                            ? styles.close
+                                                            : 'd-none'
+                                                    }`}
+                                                    onClick={() => {
+                                                        setShowPassword(
+                                                            (pre) => {
+                                                                return {
+                                                                    ...(pre as {
+                                                                        [
+                                                                            name: string
+                                                                        ]: boolean;
+                                                                    }),
+                                                                    'password':
+                                                                        !showPassword[
+                                                                            'password'
+                                                                        ],
+                                                                };
+                                                            }
+                                                        );
+                                                    }}
+                                                ></span>
+                                            </div>
+                                        </div>
                                         <ErrorMessage
                                             name="password"
                                             component="div"
@@ -327,29 +382,85 @@ export default function ForgotPassword() {
                                     </div>
 
                                     <div className="mb-4">
-                                        <Field
-                                            type="password"
-                                            id="cnf-password"
-                                            name="cnfPassword"
-                                            placeholder="Confirm password"
-                                            className={`mt-1 p-2 w-full border rounded-md ve-field ${
+                                        <div
+                                            className={`mt-1 p-2 w-full border rounded-md ve-field  ${
+                                                styles.password_wrapper
+                                            } ${
                                                 errors.password
                                                     ? 'default-error-border'
-                                                    : ''
+                                                    : 'field'
                                             }`}
-                                        />
+                                        >
+                                            <Field
+                                                type={
+                                                    showPassword['cnf-password']
+                                                        ? 'text'
+                                                        : 'password'
+                                                }
+                                                id="cnf-password"
+                                                name="cnf-password"
+                                                placeholder="Confirm your password"
+                                                className="flex-1"
+                                            />
+                                            <div className={styles.eye_wrapper}>
+                                                <EyeIcon
+                                                    onClick={() => {
+                                                        setShowPassword(
+                                                            (pre) => {
+                                                                return {
+                                                                    ...(pre as {
+                                                                        [
+                                                                            name: string
+                                                                        ]: boolean;
+                                                                    }),
+                                                                    'cnf-password':
+                                                                        !showPassword[
+                                                                            'cnf-password'
+                                                                        ],
+                                                                };
+                                                            }
+                                                        );
+                                                    }}
+                                                />
+                                                <span
+                                                    className={`${
+                                                        styles.eye_icon
+                                                    } ${
+                                                        showPassword[
+                                                            'cnf-password'
+                                                        ]
+                                                            ? styles.close
+                                                            : 'd-none'
+                                                    }`}
+                                                    onClick={() => {
+                                                        setShowPassword(
+                                                            (pre) => {
+                                                                return {
+                                                                    ...(pre as {
+                                                                        [
+                                                                            name: string
+                                                                        ]: boolean;
+                                                                    }),
+                                                                    'cnf-password':
+                                                                        !showPassword[
+                                                                            'cnf-password'
+                                                                        ],
+                                                                };
+                                                            }
+                                                        );
+                                                    }}
+                                                ></span>
+                                            </div>
+                                        </div>
                                         <ErrorMessage
-                                            name="cnfPassword"
+                                            name="cnf-password"
                                             component="div"
                                             className="text-sm mt-1 default-error"
                                         />
                                     </div>
 
                                     <div className="mt-12 mb-4">
-                                        <Button
-                                            text="Save"
-                                            loader={loader}
-                                        ></Button>
+                                        <Button text="Save"></Button>
                                     </div>
 
                                     <div className="flex justify-center">

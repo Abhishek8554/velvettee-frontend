@@ -10,6 +10,7 @@ import { SnackBarTypes } from '../../enums/SnackBarTypes';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import useApi from '../../hooks/useApi';
+import useLoader from '../../stores/FullPageLoader';
 
 interface Values {
     email: string;
@@ -18,10 +19,10 @@ interface Values {
 
 export default function Login() {
     const api = useApi();
+    const loaderService = useLoader();
     const [showPassword, setShowPassword] = useState<{
         [name: string]: boolean;
     }>({});
-    const [loader, setLoader] = useState(false);
     const { setToken } = useAuthStore();
     const snackBarService = useSnackBar();
 
@@ -38,16 +39,16 @@ export default function Login() {
     });
 
     const handleSubmit = (values: Values) => {
-        setLoader(true);
+        loaderService.showFullPageLoader();
         api.post('/login', { email: values.email, password: values.password })
             .then((res) => {
                 setToken(res.data.token);
                 snackBarService.open('Login Successfull');
-                setLoader(false);
+                loaderService.hideFullPageLoader();
             })
             .catch((err) => {
                 snackBarService.open(err.message, SnackBarTypes.DANGER);
-                setLoader(false);
+                loaderService.hideFullPageLoader();
             });
     };
 
@@ -188,7 +189,7 @@ export default function Login() {
                             </div>
 
                             <div className="mt-12 mb-4">
-                                <Button loader={loader} text="Login"></Button>
+                                <Button text="Login"></Button>
                             </div>
 
                             <div className="flex justify-center">

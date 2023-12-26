@@ -6,8 +6,11 @@ import LandingPage from './screens/landing-page/LandingPage';
 import ForgotPassword from './screens/ForgotPassword';
 import { ThemeProvider, createTheme } from '@mui/material';
 import Snackbar from './components/snackbar/Snackbar';
+import FullPageLoader from './components/full-page-loader/FullPageLoader';
+import useLoader from './stores/FullPageLoader';
 
 function App() {
+    const loaderService = useLoader();
     const theme = createTheme({
         palette: {
             primary: {
@@ -21,8 +24,15 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
-            <div className="app-container">
+            <div
+                className={
+                    loaderService.loaderVisible
+                        ? 'app-container overflow-hidden h-screen'
+                        : 'app-container'
+                }
+            >
                 <Snackbar />
+                <FullPageLoader />
                 <Routes>
                     <Route path="/" Component={LandingPage} />
                     <Route path="/login" Component={Login} />
