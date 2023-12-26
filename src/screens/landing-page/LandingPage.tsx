@@ -14,6 +14,8 @@ const LandingPage = () => {
                 <Carousel
                     infiniteLoop
                     autoPlay
+                    emulateTouch
+                    swipeable
                     showThumbs={false}
                     className={styles.carousel}
                     showArrows
