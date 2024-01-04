@@ -1,6 +1,6 @@
 import styles from './Register.module.scss';
 import { Formik, Field, ErrorMessage, Form } from 'formik';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { SnackBarTypes } from '../../enums/SnackBarTypes';
 import useAuthStore from '../../stores/Auth';
 import useSnackBar from '../../stores/Snackbar';
@@ -20,6 +20,7 @@ interface Values {
 
 export default function Register() {
     const { setToken } = useAuthStore();
+    const navigate = useNavigate();
     const snackBarService = useSnackBar();
     const [showPassword, setShowPassword] = useState<{
         [name: string]: boolean;
@@ -53,7 +54,7 @@ export default function Register() {
             .then((res) => {
                 setToken(res.data.token as string);
                 loaderService.hideFullPageLoader();
-                snackBarService.open('Register Successfull');
+                navigate('/');
             })
             .catch((err) => {
                 snackBarService.open(err.message, SnackBarTypes.DANGER);

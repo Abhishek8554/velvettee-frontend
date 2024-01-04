@@ -2,7 +2,7 @@ import Card from '../components/Card';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Button from '../components/Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import styles from '../screens/login/Login.module.scss';
 import useApi from '../hooks/useApi';
@@ -39,6 +39,7 @@ export default function ForgotPassword() {
     const snackBarService = useSnackBar();
     const api = useApi();
     const loaderService = useLoader();
+    const navigate = useNavigate();
     const [otpFormFields, setOtpFormFields] = useState<OtpValues>({
         value1: '',
         value2: '',
@@ -93,7 +94,6 @@ export default function ForgotPassword() {
         })
             .then(() => {
                 loaderService.hideFullPageLoader();
-                snackBarService.open('OTP verification successfull');
                 setForgotPasswordStage(3);
             })
             .catch((err) => {
@@ -114,7 +114,7 @@ export default function ForgotPassword() {
         })
             .then(() => {
                 loaderService.hideFullPageLoader();
-                snackBarService.open('Welcome');
+                navigate('/login');
             })
             .catch((err) => {
                 loaderService.hideFullPageLoader();

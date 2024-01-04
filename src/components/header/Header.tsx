@@ -10,7 +10,8 @@ import {
 } from '@heroicons/react/20/solid';
 import { UserCircleIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
-const Header = () => {
+import useAuthStore from '../../stores/Auth';
+const Header = (props: { showLogout?: boolean }) => {
     const [menAnchorEl, setMenAnchorEl] = React.useState<null | HTMLElement>(
         null
     );
@@ -37,6 +38,8 @@ const Header = () => {
         }
     };
     const mensMenuItems: string[] = ['Shirt', 'T-Shirts', 'Jeans', 'Pants'];
+    const authStore = useAuthStore();
+
     return (
         <div className={styles.wrapper}>
             <Link to={'/'}>
@@ -80,7 +83,6 @@ const Header = () => {
                                 onClick={() => {
                                     handleClose('men');
                                 }}
-                                classes={styles.harshtanya}
                             >
                                 {item}
                             </MenuItem>
@@ -120,7 +122,6 @@ const Header = () => {
                                 onClick={() => {
                                     handleClose('wmen');
                                 }}
-                                classes={styles.harshtanya}
                             >
                                 {item}
                             </MenuItem>
@@ -138,19 +139,32 @@ const Header = () => {
                     />
                 </div>
                 <div className={styles.buttons_container}>
-                    <Link to="/login" className={styles.button}>
-                        <span>
-                            <UserCircleIcon />
-                        </span>
-                        <p>Login</p>
-                    </Link>
+                    {props.showLogout ? (
+                        <a
+                            className={styles.button}
+                            onClick={() => {
+                                authStore.setToken('');
+                            }}
+                        >
+                            Logout
+                        </a>
+                    ) : (
+                        <>
+                            <Link to="/login" className={styles.button}>
+                                <span>
+                                    <UserCircleIcon />
+                                </span>
+                                <p>Login</p>
+                            </Link>
 
-                    <Link to="/cart" className={styles.button}>
-                        <span>
-                            <ShoppingCartIcon />
-                        </span>
-                        <p>Cart</p>
-                    </Link>
+                            <Link to="/cart" className={styles.button}>
+                                <span>
+                                    <ShoppingCartIcon />
+                                </span>
+                                <p>Cart</p>
+                            </Link>
+                        </>
+                    )}
                 </div>
             </div>
         </div>

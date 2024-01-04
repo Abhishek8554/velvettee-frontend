@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import Button from '../../components/Button';
 import useAuthStore from '../../stores/Auth';
 import useSnackBar from '../../stores/Snackbar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { SnackBarTypes } from '../../enums/SnackBarTypes';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
@@ -19,6 +19,7 @@ interface Values {
 
 export default function Login() {
     const api = useApi();
+    const navigate = useNavigate();
     const loaderService = useLoader();
     const [showPassword, setShowPassword] = useState<{
         [name: string]: boolean;
@@ -43,8 +44,8 @@ export default function Login() {
         api.post('/login', { email: values.email, password: values.password })
             .then((res) => {
                 setToken(res.data.token);
-                snackBarService.open('Login Successfull');
                 loaderService.hideFullPageLoader();
+                navigate('/');
             })
             .catch((err) => {
                 snackBarService.open(err.message, SnackBarTypes.DANGER);
