@@ -12,7 +12,6 @@ const Footer = () => {
                             }}
                         ></i>
                     </div>
-                    <div className={styles.brand_name}>Velvettee</div>
                 </div>
                 <div className={styles.address}>
                     Address: lorem ipsum lorem ipsum 2045,3 54 lorem ipsum.

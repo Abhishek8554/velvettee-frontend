@@ -19,6 +19,10 @@ h1 {
     background-color: var(--primary-color);
     width: 100%;
 }
+.outline-button {
+    height: 3rem;
+    border-color: 1px solid currentColor;
+}
 
 .default-error {
     font-size: 12px;

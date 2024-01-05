@@ -11,6 +11,7 @@ import FullPageLoader from './components/full-page-loader/FullPageLoader';
 import useLoader from './stores/FullPageLoader';
 // import ProtecredRoute from './components/ProtecredRoute';
 import useAuthStore from './stores/Auth';
+import ProductListing from './screens/product-listing/ProductListing';
 
 function App() {
     const loaderService = useLoader();
@@ -66,6 +67,10 @@ function App() {
                                 <ForgotPassword />
                             )
                         }
+                    />
+                    <Route
+                        path="/products/:searchString"
+                        Component={ProductListing}
                     />
                     <Route path="*" element={<Navigate to={'/'} />} />
                 </Routes>
