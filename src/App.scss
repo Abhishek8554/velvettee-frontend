@@ -6,6 +6,17 @@ h1 {
     border-bottom: 1px solid #a4a4a4;
 }
 
+.circle {
+    height: 40px;
+    width: 40px;
+    border-radius: 69%;
+    border: 1px solid var(--primary-color);
+}
+
+.text-primary {
+    color: var(--primary-color);
+}
+
 .ve-field {
     height: 3rem;
 }
@@ -51,6 +62,7 @@ h1 {
 input {
     outline: none;
 }
+
 // Pre sets
 
 /* Chrome, Safari, Edge, Opera */
@@ -83,6 +95,7 @@ label {
     display: flex;
     align-items: center;
 }
+
 input[type='checkbox'] {
     /* display: none; */
     /* appearance: none; */
@@ -101,11 +114,14 @@ input[type='checkbox'] {
         content: url('/public/checkbox.svg');
         display: none;
     }
+
     &:hover {
         background: #a5a5a5;
     }
+
     &:checked {
         background: var(--primary-color);
+
         &:after {
             display: block;
         }

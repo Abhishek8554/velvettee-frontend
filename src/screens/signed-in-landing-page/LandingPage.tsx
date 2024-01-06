@@ -6,6 +6,7 @@ import ProductCard from '../../components/product-card/ProductCard';
 import Footer from '../../components/footer/Footer';
 import { ChevronLeftIcon } from '@heroicons/react/20/solid';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
     return (
@@ -68,6 +69,16 @@ const LandingPage = () => {
                     </a>
                 </div>
                 <div className={styles.cards_wrapper}>
+                    <Link to="/product-details">
+                        <ProductCard
+                            id="1"
+                            imageUrl="/public/product.jpeg"
+                            originalPrice={1000}
+                            sellingPrice={100}
+                            productDescription="Detail of product1: Lorem Ipsum Lorem Ipsum"
+                            productName="Shirt"
+                        />
+                    </Link>
                     <ProductCard
                         id="1"
                         imageUrl="/public/product.jpeg"
@@ -83,14 +94,7 @@ const LandingPage = () => {
                         sellingPrice={100}
                         productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
                         productName="Shirt"
-                    />
-                    <ProductCard
-                        id="1"
-                        imageUrl="/public/product.jpeg"
-                        originalPrice={1000}
-                        sellingPrice={100}
-                        productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
-                        productName="Shirt"
+
                     />
                     <ProductCard
                         id="1"

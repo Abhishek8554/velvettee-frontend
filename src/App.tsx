@@ -12,6 +12,7 @@ import useLoader from './stores/FullPageLoader';
 // import ProtecredRoute from './components/ProtecredRoute';
 import useAuthStore from './stores/Auth';
 import ProductListing from './screens/product-listing/ProductListing';
+import ProductDetails from './screens/product-details/ProductDetails';
 
 function App() {
     const loaderService = useLoader();
@@ -72,10 +73,11 @@ function App() {
                         path="/products/:searchString"
                         Component={ProductListing}
                     />
+                    <Route path="/product-details" Component={ProductDetails} />
                     <Route path="*" element={<Navigate to={'/'} />} />
-                </Routes>
-            </div>
-        </ThemeProvider>
+                </Routes >
+            </div >
+        </ThemeProvider >
     );
 }
 
