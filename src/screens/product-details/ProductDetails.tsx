@@ -2,12 +2,19 @@ import { useState } from 'react';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import styles from './ProductDetails.module.scss';
+import Button, { ButtonTypes } from '../../components/Button';
+import Carousel from 'react-multi-carousel';
+import ProductCard from '../../components/product-card/ProductCard';
+import 'react-multi-carousel/lib/styles.css'
 
 export default function ProductDetails() {
+    const sizes = [28, 30, 32, 34, 36, 38];
 
     const imagePath = "/public/product.jpeg";
 
     const [currentImage, setCurrentImage] = useState<string>(imagePath);
+    const [selectedSize, setSelectedSize] = useState<number>(28);
+    const [quantity, setQuantity] = useState<number>(1);
 
     return (
         <div className={styles.wrapper}>
@@ -17,7 +24,7 @@ export default function ProductDetails() {
 
 
 
-            <div>
+            <div className='mb-8'>
                 <div className="container mx-auto my-8 flex">
                     <nav className="text-sm">
                         <a href="#" className="text-gray-600 hover:text-gray-800">Home</a>
@@ -46,7 +53,7 @@ export default function ProductDetails() {
 
                     </div>
 
-                    <div className="w-1/2 p-8 bg-white">
+                    <div className="w-1/2 mt-4 ml-12">
                         <h1 className="text-2xl font-bold mb-4 text-black">Product Company Name</h1>
                         <p className="text-gray-600 mb-4 text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 
@@ -71,36 +78,204 @@ export default function ProductDetails() {
                             </div>
                         </div>
 
-                        <div className='font-bold text-xs '>
+                        <div className='font-bold text-xs mb-8'>
                             <p> SELECT SIZE </p>
                             <div className='flex mt-3'>
-                                <div className="circle flex justify-center items-center">
-                                    <span className="text-xs font-light text-primary">36</span>
-                                </div>
-                                <div className="circle ml-4 flex justify-center items-center">
-                                    <span className="text-xs font-light text-primary">38</span>
-                                </div>
-                                <div className="circle ml-4 flex justify-center items-center">
-                                    <span className="text-xs font-light text-primary">40</span>
-                                </div>
-                                <div className="circle ml-4 flex justify-center items-center">
-                                    <span className="text-xs font-light text-primary">42</span>
-                                </div>
-                                <div className="circle ml-4 flex justify-center items-center">
-                                    <span className="text-xs font-light text-primary">44</span>
-                                </div>
+                                {
+                                    sizes.map(each => {
+                                        return (
+                                            <button key={each} onClick={() => setSelectedSize(each)} className={`circle flex mr-3 justify-center items-center ${selectedSize === each && "circle-active"}`}>
+                                                <span className="text-xs font-light">{each}</span>
+                                            </button>
+                                        )
+                                    })
+                                }
                             </div>
                         </div>
-                        <div className="mt-8">
-                            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add to Cart</button>
+
+                        <div className="flex w-fit justify-center quantity-conatiner mb-8">
+                            <button
+                                className="quantity-circle flex mr-5 justify-center items-end"
+                                disabled={quantity == 1}
+                                onClick={() => setQuantity(quantity - 1)}
+                            >
+                                &minus;
+                            </button>
+
+                            <span className="text-xs font-bold">{quantity}</span>
+
+                            <button
+                                className="quantity-circle flex ml-5 justify-center items-end"
+                                onClick={() => setQuantity(quantity + 1)}
+                            >
+                                &#43;
+                            </button>
                         </div>
+
+                        <div className='action-buttons flex mb-8'>
+                            <div className='w-3/5 mr-3'>
+                                <Button text='ADD TO CART' className='font-bold' />
+                            </div>
+                            <div className='w-fit'>
+                                <Button text='WISHLIST' type={ButtonTypes.OUTLINE} className='font-bold' />
+                            </div>
+                        </div>
+
+                        <div className=''>
+                            <div className='text-xl text-primary font-bold mb-4'>
+                                <p> Product Details </p>
+                            </div>
+
+                            <div>
+                                <ul className='list-disc text-s ml-6'>
+                                    <li className='mb-2'>Material</li>
+                                    <li className='mb-2'>Regular Fit</li>
+                                    <li className='mb-2'>Machine Wash</li>
+                                    <li className='mb-2'>Manufactured by : Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum</li>
+                                </ul>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
+                <hr />
 
             </div>
+
+
+            <div className='container mx-auto mb-8'>
+                <p className='text-l font-bold'> Similar styles </p>
+
+                <div className='mt-8'>
+                    <Carousel
+                        additionalTransfrom={0}
+                        arrows
+                        autoPlaySpeed={3000}
+                        centerMode={false}
+                        className=""
+                        containerClass="carousel-container w-full"
+                        dotListClass=""
+                        draggable
+                        focusOnSelect={false}
+                        infinite
+                        itemClass="ml-2"
+                        keyBoardControl
+                        minimumTouchDrag={80}
+                        pauseOnHover
+                        renderArrowsWhenDisabled={false}
+                        renderButtonGroupOutside={false}
+                        renderDotsOutside={false}
+                        responsive={{
+                            desktop: {
+                                breakpoint: {
+                                    max: 3000,
+                                    min: 1024
+                                },
+                                items: 5,
+                                partialVisibilityGutter: 40
+                            },
+                            mobile: {
+                                breakpoint: {
+                                    max: 464,
+                                    min: 0
+                                },
+                                items: 1,
+                                partialVisibilityGutter: 30
+                            },
+                            tablet: {
+                                breakpoint: {
+                                    max: 1024,
+                                    min: 464
+                                },
+                                items: 2,
+                                partialVisibilityGutter: 30
+                            }
+                        }}
+                        rewind={false}
+                        rewindWithAnimation={false}
+                        rtl={false}
+                        shouldResetAutoplay
+                        showDots={false}
+                        sliderClass=""
+                        slidesToSlide={1}
+                        swipeable
+                    >
+                        <ProductCard
+                            id="1"
+                            imageUrl="/public/product.jpeg"
+                            originalPrice={1000}
+                            sellingPrice={100}
+                            productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
+                            productName="Shirt"
+                        />
+
+                        <ProductCard
+                            id="2"
+                            imageUrl="/public/product.jpeg"
+                            originalPrice={1000}
+                            sellingPrice={100}
+                            productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
+                            productName="Shirt"
+                        />
+
+                        <ProductCard
+                            id="3"
+                            imageUrl="/public/product.jpeg"
+                            originalPrice={1000}
+                            sellingPrice={100}
+                            productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
+                            productName="Shirt"
+                        />
+                        <ProductCard
+                            id="4"
+                            imageUrl="/public/product.jpeg"
+                            originalPrice={1000}
+                            sellingPrice={100}
+                            productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
+                            productName="Shirt"
+                        />
+                        <ProductCard
+                            id="5"
+                            imageUrl="/public/product.jpeg"
+                            originalPrice={1000}
+                            sellingPrice={100}
+                            productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
+                            productName="Shirt"
+                        />
+
+                        <ProductCard
+                            id="6"
+                            imageUrl="/public/product.jpeg"
+                            originalPrice={1000}
+                            sellingPrice={100}
+                            productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
+                            productName="Shirt"
+                        />
+
+                        <ProductCard
+                            id="7"
+                            imageUrl="/public/product.jpeg"
+                            originalPrice={1000}
+                            sellingPrice={100}
+                            productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
+                            productName="Shirt"
+                        />
+
+                        <ProductCard
+                            id="8"
+                            imageUrl="/public/product.jpeg"
+                            originalPrice={1000}
+                            sellingPrice={100}
+                            productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
+                            productName="Shirt"
+                        />
+                    </Carousel>
+                </div>
+            </div>
+
             <hr />
             <Footer />
-        </div>
+        </div >
     )
 }

@@ -8,14 +8,15 @@ type ButtonProps = {
     text: string;
     loader?: boolean;
     type?: ButtonTypes;
+    className?: string;
 };
 
-const Button: React.FC<ButtonProps> = ({ text, loader, type }) => {
+const Button: React.FC<ButtonProps> = ({ text, loader, type, className }) => {
     if (!type) {
         return (
             <button
                 type="submit"
-                className="bg-blue-500 text-white p-2 rounded-md w-full sm:w-auto default-button flex items-center justify-center"
+                className={`bg-blue-500 text-white p-2 rounded-md w-full sm:w-auto default-button flex items-center justify-center ${className}`}
             >
                 {text}
                 &nbsp;
@@ -27,7 +28,7 @@ const Button: React.FC<ButtonProps> = ({ text, loader, type }) => {
         return (
             <button
                 type="submit"
-                className="border-2 font-medium border-current p-2 rounded-md w-full sm:w-auto outline-button flex items-center justify-center color-primary"
+                className={`border-2 font-medium border-current p-2 rounded-md w-full sm:w-auto outline-button flex items-center justify-center color-primary ${className}`}
             >
                 {text}
                 &nbsp;

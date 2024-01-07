@@ -10,7 +10,26 @@ h1 {
     height: 40px;
     width: 40px;
     border-radius: 69%;
+    border: 1px solid var(--sub-text-color);
+}
+
+
+.quantity-circle {
+    height: 15px;
+    width: 15px;
+    border-radius: 69%;
+    border: 1px solid black;
+}
+
+.quantity-conatiner {
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    padding: 6px;
+}
+
+.circle-active {
     border: 1px solid var(--primary-color);
+    color: var(--primary-color)
 }
 
 .text-primary {
@@ -30,6 +49,11 @@ h1 {
     background-color: var(--primary-color);
     width: 100%;
 }
+
+[dir="rtl"] .carousel-container {
+    direction: ltr;
+}
+
 .outline-button {
     height: 3rem;
     border-color: 1px solid currentColor;
