@@ -51,11 +51,12 @@ const Header = () => {
                     />
                 </div>
                 {/* Remember to add ! */}
-                {authStore.token ? (
+                {!authStore.token ? (
                     <Link to={'/signup'} className={styles.buttons_container}>
                         <Button
                             text="Login / Signup"
                             type={ButtonTypes.OUTLINE}
+                            className={styles.login_btn}
                         />
                     </Link>
                 ) : (
@@ -84,13 +85,14 @@ const Header = () => {
                         </div>
                     </Link>
                     {/* Remember to add ! */}
-                    {authStore.token ? (
+                    {!authStore.token ? (
                         <Link
                             to={'/signup'}
                             className={styles.buttons_container}
                         >
                             <Button
                                 text="Login / Signup"
+                                className={styles.login_btn}
                                 type={ButtonTypes.OUTLINE}
                             />
                         </Link>
