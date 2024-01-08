@@ -13,7 +13,6 @@ h1 {
     border: 1px solid var(--sub-text-color);
 }
 
-
 .quantity-circle {
     height: 15px;
     width: 15px;
@@ -22,14 +21,14 @@ h1 {
 }
 
 .quantity-conatiner {
-    background-color: var(--primary-color);
+    background-color: transparentize(#722ecc, 0.7);
     border-radius: 5px;
     padding: 6px;
 }
 
 .circle-active {
     border: 1px solid var(--primary-color);
-    color: var(--primary-color)
+    color: var(--primary-color);
 }
 
 .text-primary {
@@ -50,7 +49,7 @@ h1 {
     width: 100%;
 }
 
-[dir="rtl"] .carousel-container {
+[dir='rtl'] .carousel-container {
     direction: ltr;
 }
 
@@ -149,5 +148,11 @@ input[type='checkbox'] {
         &:after {
             display: block;
         }
+    }
+}
+
+.button-icon-container {
+    svg {
+        height: inherit;
     }
 }

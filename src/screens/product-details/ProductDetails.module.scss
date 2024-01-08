@@ -1,5 +1,52 @@
 .wrapper {
     background-size: cover;
     position: relative;
-    background-color: var(--light-bg-color)
+    background-color: var(--light-bg-color);
+}
+
+.small_images {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.mobile_container {
+    display: none;
+}
+.arrow {
+    height: 100px;
+    width: 50px;
+    position: absolute;
+    background-color: #fff;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &.arrow_left {
+        left: 0;
+    }
+    &.arrow_right {
+        right: 0;
+    }
+}
+.carousel_image_container {
+    img {
+        margin: 0 auto;
+        /* max-width: 200px; */
+    }
+}
+@media screen and (max-width: 670px) {
+    .container {
+        display: block;
+    }
+    .left_container,
+    .right_container {
+        width: 90%;
+        margin: 0 auto;
+    }
+    .web_container {
+        display: none;
+    }
+    .mobile_container {
+        display: block;
+    }
 }
