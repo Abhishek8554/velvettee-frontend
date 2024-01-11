@@ -24,6 +24,33 @@
     right: 0;
 }
 
+.google_btn {
+    width: 100%;
+    border: 1px solid #464646;
+    color: black;
+}
+
+.google_login_text {
+    text-align: center;
+    margin: 20px 0 15px 0;
+    font-size: 14px;
+    background-color: #fff;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    span {
+        flex: 1;
+        background-color: #464646;
+        height: 1px;
+        &.text {
+            display: inline-block;
+            margin: 0 5px;
+            background-color: transparent;
+            height: unset;
+        }
+    }
+}
+
 @media screen and (max-width: 686px) {
     .boy_character_wrapper,
     .girl_character_wrapper {

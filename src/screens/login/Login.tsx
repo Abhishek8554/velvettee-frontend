@@ -2,15 +2,16 @@ import Card from '../../components/Card';
 import styles from './Login.module.scss';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import Button from '../../components/Button';
+import Button, { ButtonTypes } from '../../components/Button';
 import useAuthStore from '../../stores/Auth';
 import useSnackBar from '../../stores/Snackbar';
 import { Link, useNavigate } from 'react-router-dom';
 import { SnackBarTypes } from '../../enums/SnackBarTypes';
 import { EyeIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useApi from '../../hooks/useApi';
 import useLoader from '../../stores/FullPageLoader';
+import { environment } from '../../environments/environment';
 
 interface Values {
     email: string;
@@ -24,9 +25,8 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState<{
         [name: string]: boolean;
     }>({});
-    const { setToken } = useAuthStore();
+    const { setToken, setUser } = useAuthStore();
     const snackBarService = useSnackBar();
-
     const initialValues: Values = {
         email: '',
         password: '',
@@ -44,6 +44,7 @@ export default function Login() {
         api.post('/login', { email: values.email, password: values.password })
             .then((res) => {
                 setToken(res.data.token);
+                setUser(res.data);
                 loaderService.hideFullPageLoader();
                 navigate('/');
             })
@@ -52,6 +53,26 @@ export default function Login() {
                 loaderService.hideFullPageLoader();
             });
     };
+    const loginWithGoogle = () => {
+        window.open(environment.baseUrl + 'auth/google/callback', '_self');
+    };
+
+    const getGoogleUser = async () => {
+        try {
+            const response = await api.get('/login-success', {
+                withCredentials: true,
+            });
+            setToken(response.data.user.token);
+            setUser(response.data.user);
+            navigate('/');
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        getGoogleUser();
+    }, []);
 
     return (
         <div
@@ -205,6 +226,18 @@ export default function Login() {
                         </Form>
                     )}
                 </Formik>
+                <p className={styles.google_login_text}>
+                    <span></span>
+                    <span className={styles.text}>Or login with</span>
+                    <span></span>
+                </p>
+                <Button
+                    onClick={loginWithGoogle}
+                    type={ButtonTypes.OUTLINE}
+                    className={styles.google_btn}
+                    prefixImgePath="/public/login-assets/google.svg"
+                    text="Google"
+                />
             </Card>
         </div>
     );
