@@ -12,6 +12,7 @@ import {
     UserIcon,
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import { environment } from '../../environments/environment';
 const Header = () => {
     const navigate = useNavigate();
     const authStore = useAuthStore();
@@ -25,6 +26,11 @@ const Header = () => {
             console.log(inputValue);
             navigate(`/products/${inputValue}`);
         }
+    };
+    const logout = () => {
+        window.open(environment.baseUrl + 'logout', '_self');
+        authStore.setToken('');
+        // authStore.setUser('undefined');
     };
     return (
         <>
@@ -61,7 +67,7 @@ const Header = () => {
                     </Link>
                 ) : (
                     <div className={styles.buttons_container}>
-                        <div className={styles.button_icon}>
+                        <div onClick={logout} className={styles.button_icon}>
                             <UserIcon />
                         </div>
                         <div className={styles.button_icon}>
@@ -98,7 +104,10 @@ const Header = () => {
                         </Link>
                     ) : (
                         <div className={styles.buttons_container}>
-                            <div className={styles.button_icon}>
+                            <div
+                                onClick={logout}
+                                className={styles.button_icon}
+                            >
                                 <UserIcon />
                             </div>
                             <div className={styles.button_icon}>

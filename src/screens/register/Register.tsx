@@ -6,11 +6,12 @@ import useAuthStore from '../../stores/Auth';
 import useSnackBar from '../../stores/Snackbar';
 import * as Yup from 'yup';
 import Card from '../../components/Card';
-import Button from '../../components/Button';
+import Button, { ButtonTypes } from '../../components/Button';
 import { useState } from 'react';
 import useApi from '../../hooks/useApi';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import useLoader from '../../stores/FullPageLoader';
+import { environment } from '../../environments/environment';
 
 interface Values {
     email: string;
@@ -19,7 +20,7 @@ interface Values {
 }
 
 export default function Register() {
-    const { setToken } = useAuthStore();
+    const { setToken, setUser } = useAuthStore();
     const navigate = useNavigate();
     const snackBarService = useSnackBar();
     const [showPassword, setShowPassword] = useState<{
@@ -53,6 +54,7 @@ export default function Register() {
         })
             .then((res) => {
                 setToken(res.data.token as string);
+                setUser(res.data);
                 loaderService.hideFullPageLoader();
                 navigate('/');
             })
@@ -260,6 +262,23 @@ export default function Register() {
                             </Form>
                         )}
                     </Formik>
+                    <p className={styles.google_login_text}>
+                        <span></span>
+                        <span className={styles.text}>Or Signup with</span>
+                        <span></span>
+                    </p>
+                    <Button
+                        onClick={() => {
+                            window.open(
+                                environment.baseUrl + 'auth/google/callback',
+                                '_self'
+                            );
+                        }}
+                        type={ButtonTypes.OUTLINE}
+                        className={styles.google_btn}
+                        prefixImgePath="/public/login-assets/google.svg"
+                        text="Google"
+                    />
                 </Card>
             </div>
         </div>

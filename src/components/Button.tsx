@@ -10,7 +10,8 @@ type ButtonProps = {
     loader?: boolean;
     type?: ButtonTypes;
     className?: string;
-    Icon?: any;
+    PrefixIcon?: any;
+    prefixImgePath?: string;
     onClick?: () => void;
 };
 
@@ -19,7 +20,8 @@ const Button: React.FC<ButtonProps> = ({
     loader,
     type,
     className,
-    Icon,
+    PrefixIcon,
+    prefixImgePath,
     onClick,
 }) => {
     if (!type) {
@@ -29,11 +31,16 @@ const Button: React.FC<ButtonProps> = ({
                 type="submit"
                 className={`bg-blue-500 text-white p-2 rounded-md w-full sm:w-auto default-button flex items-center justify-center ${className}`}
             >
-                {Icon && (
+                {PrefixIcon && (
                     <span className="h-5 button-icon-container mr-1 flex">
-                        <Icon />
+                        <PrefixIcon />
                     </span>
                 )}{' '}
+                {prefixImgePath && (
+                    <span className="h-5 button-icon-container mr-1 flex">
+                        <img src={prefixImgePath} />
+                    </span>
+                )}
                 {text}
                 &nbsp;
                 {loader && <Spinner />}
@@ -47,11 +54,16 @@ const Button: React.FC<ButtonProps> = ({
                 type="submit"
                 className={`border-2 font-medium border-current p-2 rounded-md w-full sm:w-auto outline-button flex items-center justify-center color-primary ${className}`}
             >
-                {Icon && (
+                {PrefixIcon && (
                     <span className="h-5 button-icon-container mr-1 flex">
-                        <Icon />
+                        <PrefixIcon />
                     </span>
                 )}{' '}
+                {prefixImgePath && (
+                    <span className="h-5 button-icon-container mr-1 flex">
+                        <img src={prefixImgePath} />
+                    </span>
+                )}
                 {text}
                 &nbsp;
                 {loader && <Spinner />}
