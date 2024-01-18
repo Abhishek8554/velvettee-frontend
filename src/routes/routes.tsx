@@ -8,6 +8,7 @@ import Register from '../screens/register/Register';
 import ForgotPassword from '../screens/ForgotPassword';
 import ProductListing from '../screens/product-listing/ProductListing';
 import ProductDetails from '../screens/product-details/ProductDetails';
+import Cart from '../screens/cart/Cart';
 
 const redirectToHome = (): JSX.Element => {
     const auth = JSON.parse(localStorage.getItem('ve-auth-storage') as string);
@@ -50,6 +51,11 @@ export const router = createBrowserRouter([
         path: '/product-detail/:id',
         element: <ProductDetails />,
     },
+    {
+        path: '/cart',
+        element: <Cart />,
+    },
+
     {
         path: '*',
         element: <Navigate to="/" />,

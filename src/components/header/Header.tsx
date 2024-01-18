@@ -30,7 +30,7 @@ const Header = () => {
     const logout = () => {
         window.open(environment.baseUrl + 'logout', '_self');
         authStore.setToken('');
-        // authStore.setUser('undefined');
+        authStore.setUser(undefined);
     };
     return (
         <>
@@ -73,9 +73,9 @@ const Header = () => {
                         <div className={styles.button_icon}>
                             <HeartIcon />
                         </div>
-                        <div className={styles.button_icon}>
+                        <Link to="/cart" className={styles.button_icon}>
                             <ShoppingCartIcon />
-                        </div>
+                        </Link>
                     </div>
                 )}
             </div>

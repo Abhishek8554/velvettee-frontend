@@ -39,6 +39,10 @@ h1 {
     height: 3rem;
 }
 
+.transparent {
+    background-color: transparent;
+}
+
 .default-login-box {
     width: 651px;
 }
@@ -65,7 +69,7 @@ h1 {
 }
 
 .default-error-border {
-    border: 1px solid var(--danger-color);
+    border: 1px solid var(--danger-color) !important;
 }
 
 .ve-terms {

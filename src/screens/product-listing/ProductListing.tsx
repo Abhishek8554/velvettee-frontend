@@ -5,90 +5,48 @@ import styles from './ProductListing.module.scss';
 import Button from '../../components/Button';
 import Footer from '../../components/footer/Footer';
 import { Link, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import useApi from '../../hooks/useApi';
+import useLoader from '../../stores/FullPageLoader';
 const ProductListing = () => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const [showMoreLoader, setShowMoreLoader] = useState(false);
+    const api = useApi();
+    const loader = useLoader();
     const params = useParams();
-    const products = [
-        {
-            id: 1,
-            imageUrl: '/public/product.jpeg',
-            originalPrice: 1000,
-            sellingPrice: 100,
-            productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
-            productName: 'shirt',
-        },
-        {
-            id: 2,
-            imageUrl: '/public/product.jpeg',
-            originalPrice: 1000,
-            sellingPrice: 100,
-            productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
-            productName: 'shirt',
-        },
-        {
-            id: 3,
-            imageUrl: '/public/product.jpeg',
-            originalPrice: 1000,
-            sellingPrice: 100,
-            productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
-            productName: 'shirt',
-        },
-        {
-            id: 4,
-            imageUrl: '/public/product.jpeg',
-            originalPrice: 1000,
-            sellingPrice: 100,
-            productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
-            productName: 'shirt',
-        },
-        {
-            id: 5,
-            imageUrl: '/public/product.jpeg',
-            originalPrice: 1000,
-            sellingPrice: 100,
-            productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
-            productName: 'shirt',
-        },
-        {
-            id: 6,
-            imageUrl: '/public/product.jpeg',
-            originalPrice: 1000,
-            sellingPrice: 100,
-            productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
-            productName: 'shirt',
-        },
-        {
-            id: 7,
-            imageUrl: '/public/product.jpeg',
-            originalPrice: 1000,
-            sellingPrice: 100,
-            productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
-            productName: 'shirt',
-        },
-        {
-            id: 8,
-            imageUrl: '/public/product.jpeg',
-            originalPrice: 1000,
-            sellingPrice: 100,
-            productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
-            productName: 'shirt',
-        },
-        {
-            id: 9,
-            imageUrl: '/public/product.jpeg',
-            originalPrice: 1000,
-            sellingPrice: 100,
-            productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
-            productName: 'shirt',
-        },
-        {
-            id: 10,
-            imageUrl: '/public/product.jpeg',
-            originalPrice: 1000,
-            sellingPrice: 100,
-            productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
-            productName: 'shirt',
-        },
-    ];
+    const [initialDataLoad, setInitialDataLoad] = useState(true);
+    const [products, setProducts] = useState<any>();
+
+    const fetchProducts = () => {
+        if (initialDataLoad) {
+            loader.showFullPageLoader();
+        }
+        api.get(`/products/productlist/${currentPage}/2`)
+            .then((data) => {
+                setProducts((pre: any) => {
+                    if (pre && pre.length) {
+                        return [...pre, ...data.data.products];
+                    } else {
+                        return [...data.data.products];
+                    }
+                });
+                loader.hideFullPageLoader();
+                setInitialDataLoad(false);
+                setShowMoreLoader(false);
+            })
+            .catch(() => {
+                loader.hideFullPageLoader();
+                setShowMoreLoader(false);
+            });
+    };
+
+    useEffect(() => {
+        fetchProducts();
+    }, [currentPage]);
+    const handleShowMore = () => {
+        setShowMoreLoader(true);
+        setCurrentPage(currentPage + 1);
+    };
     return (
         <>
             <div className={styles.wrapper}>
@@ -99,21 +57,29 @@ const ProductListing = () => {
                     <p>{params.search} - 52 Items</p>
                 </p>
                 <div className={styles.cards_wrapper}>
-                    {products.map((product) => (
-                        <Link to={`/product-detail/${product.id}`}>
-                            <ProductCard
-                                id={product.id.toString()}
-                                imageUrl={product.imageUrl}
-                                originalPrice={product.originalPrice}
-                                sellingPrice={product.sellingPrice}
-                                productDescription={product.productDescription}
-                                productName={product.productName}
-                            />
-                        </Link>
-                    ))}
+                    {products &&
+                        products.map((product: any) => (
+                            <Link to={`/product-detail/${product._id}`}>
+                                <ProductCard
+                                    id={product._id.toString()}
+                                    imageUrl={product.imageUrl}
+                                    originalPrice={product.price}
+                                    sellingPrice={product.sellingPrice}
+                                    productDescription={
+                                        product.productShortDesc
+                                    }
+                                    productName={product.name}
+                                    product={product}
+                                />
+                            </Link>
+                        ))}
                 </div>
                 <div className={styles.button_container}>
-                    <Button text="Show More" />
+                    <Button
+                        loader={showMoreLoader}
+                        text="Show More"
+                        onClick={handleShowMore}
+                    />
                 </div>
             </div>
             <Footer />

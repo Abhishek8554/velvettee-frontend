@@ -1,0 +1,220 @@
+.wrapper {
+    padding: 4em 4.5em;
+    background-color: #eae9f2;
+    font-family: var(--font-family);
+}
+
+.stepper_wrapper {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    margin: 0 auto;
+}
+.stepper_item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+
+    @media (max-width: 768px) {
+        font-size: 12px;
+    }
+}
+
+.stepper_item::before {
+    position: absolute;
+    content: '';
+    border-bottom: 5px solid #c7c7c7;
+    width: 100%;
+    top: 20px;
+    left: -50%;
+    z-index: 2;
+}
+
+.stepper_item::after {
+    position: absolute;
+    content: '';
+    border-bottom: 5px solid #c7c7c7;
+    width: 100%;
+    top: 20px;
+    left: 50%;
+    z-index: 2;
+}
+
+.stepper_item .step_counter {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 5px solid #c7c7c7;
+    background-color: #eae9f2;
+    margin-bottom: 6px;
+    cursor: pointer;
+}
+
+.stepper_item.completed .step_counter {
+    background-color: #4bb543;
+}
+.step_counter.active {
+    background-color: #c799ff;
+}
+.stepper_item.completed::after {
+    position: absolute;
+    content: '';
+    border-bottom: 5px solid #4bb543;
+    width: 100%;
+    top: 20px;
+    left: 50%;
+    z-index: 3;
+}
+
+.stepper_item:first-child::before {
+    content: none;
+}
+.stepper_item:last-child::after {
+    content: none;
+}
+
+.steps_container {
+    padding-top: 4em;
+}
+.step_1 {
+    display: flex;
+    gap: 2rem;
+}
+
+.left {
+    flex: 0.6;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    border: 1px solid #c4c4c4;
+    padding: 20px;
+    border-radius: 5px;
+}
+.right {
+    flex: 0.4;
+}
+.pricing_details {
+    border: 1px solid #c4c4c4;
+    /* padding: 1rem 2rem; */
+    border-radius: 5px;
+    h1 {
+        text-transform: uppercase;
+        font-size: 1.5rem;
+        font-weight: 500;
+        color: black;
+        padding: 2rem;
+    }
+    .card_body {
+        padding: 1.5rem 2.5rem;
+        .pricing_row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            font-size: 1.25rem;
+            font-weight: 500;
+            &.cart_total,
+            &.total {
+                font-weight: 700;
+            }
+        }
+    }
+}
+.seprator {
+    border-bottom: 1px solid #696871;
+}
+
+.cta {
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 2.5rem 0;
+}
+.arrow {
+    height: 100px;
+    width: 50px;
+    position: absolute;
+    background-color: #fff;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &.arrow_left {
+        left: 0;
+    }
+    &.arrow_right {
+        right: 0;
+    }
+}
+
+.form_heading {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.field {
+    border: 1px solid #696871;
+}
+.city_state_wrapper {
+    width: 50%;
+    display: flex;
+    gap: 1rem;
+}
+
+input[type='radio'] {
+    display: none;
+    & + .radio_labels {
+        font-size: 1.25rem;
+        padding: 0.5em 1em;
+        border-radius: 100000px;
+        cursor: pointer;
+        border: 2px solid currentColor;
+        color: #696871;
+    }
+    &:checked + .radio_labels {
+        color: var(--primary-color);
+    }
+}
+
+.card_form_wrapper {
+    display: flex;
+    gap: 1.5rem;
+}
+.payment_mode {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+.add_card_form {
+    flex: 1;
+    border: 1px solid #696871;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.card_fields_wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+@media screen and (max-width: 1140px) {
+    .wrapper {
+        padding: 1em 1.5em;
+    }
+}
+
+@media screen and (max-width: 440px) {
+    .wrapper {
+        padding: 1em 0.5em;
+    }
+}

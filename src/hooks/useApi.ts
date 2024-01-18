@@ -7,7 +7,6 @@ export interface IApiConfig {
 }
 
 const useApi = (config?: IApiConfig) => {
-    const authStoreRef = authStore();
     const axiosRef = axios.create({
         baseURL: environment.baseUrl,
         headers: {
@@ -18,6 +17,7 @@ const useApi = (config?: IApiConfig) => {
     // Adding auth if required
     axiosRef.interceptors.request.use(
         (configData: InternalAxiosRequestConfig) => {
+            const authStoreRef = authStore.getState();
             if (authStoreRef.token && config?.withAuth) {
                 configData.headers.Authorization = `Bearer ${authStoreRef.token}`;
             }
