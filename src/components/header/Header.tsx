@@ -13,10 +13,14 @@ import {
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { environment } from '../../environments/environment';
+import useWishlist from '../../stores/Wishlist';
+import useCart from '../../stores/Cart';
 const Header = () => {
     const navigate = useNavigate();
     const authStore = useAuthStore();
     const [inputValue, setInputValue] = useState('');
+    const wishlist = useWishlist();
+    const cart = useCart();
     const handleInputChange = (event: any) => {
         setInputValue(event.target.value);
     };
@@ -70,11 +74,26 @@ const Header = () => {
                         <div onClick={logout} className={styles.button_icon}>
                             <UserIcon />
                         </div>
-                        <div className={styles.button_icon}>
+                        <div
+                            className={`${styles.button_icon} ${styles.wishlist}`}
+                        >
                             <HeartIcon />
+                            {wishlist.wishlist.length ? (
+                                <div className={styles.notification}></div>
+                            ) : (
+                                ''
+                            )}
                         </div>
-                        <Link to="/cart" className={styles.button_icon}>
+                        <Link
+                            to="/cart"
+                            className={`${styles.button_icon} ${styles.cart}`}
+                        >
                             <ShoppingCartIcon />
+                            {cart.cart.length ? (
+                                <div className={styles.notification}></div>
+                            ) : (
+                                ''
+                            )}
                         </Link>
                     </div>
                 )}

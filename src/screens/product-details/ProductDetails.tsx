@@ -58,8 +58,8 @@ export default function ProductDetails() {
         api.get(`/products/getproductbyid/${id}`)
             .then((product) => {
                 if (!isSimilar) {
-                    setProduct(product.data);
-                    setSizes(product.data.size);
+                    setProduct(product?.data);
+                    setSizes(product?.data?.size);
                 } else {
                     setSimilarProducts((pre) => {
                         if (pre) {
@@ -92,8 +92,8 @@ export default function ProductDetails() {
     const onAddToCart = () => {
         if (auth.token) {
             // Continue and add to wishlist
-            if (cart.cart.find((x) => x._id === product._id)) {
-                cart.remove(product._id);
+            if (cart.cart.find((x) => x._id === product?._id)) {
+                cart.remove(product?._id);
             } else {
                 cart.add(product);
             }
@@ -105,8 +105,8 @@ export default function ProductDetails() {
     const onWishlist = () => {
         if (auth.token) {
             // Continue and add to wishlist
-            if (wishlist.wishlist.find((x) => x._id === product._id)) {
-                wishlist.remove(product._id);
+            if (wishlist.wishlist.find((x) => x._id === product?._id)) {
+                wishlist.remove(product?._id);
             } else {
                 wishlist.add(product);
             }
@@ -116,7 +116,7 @@ export default function ProductDetails() {
     };
     const onQuantity = (type: 'increment' | 'decrement') => {
         if (type === 'increment') {
-            if (quantity === product.availableQuantity) {
+            if (quantity === product?.availableQuantity) {
                 snackbar.open('Quantitly Limit Exceed', SnackBarTypes.INFO);
             } else {
                 setQuantity(quantity + 1);
@@ -421,7 +421,7 @@ export default function ProductDetails() {
                                 <Button
                                     text={
                                         cart.cart.find(
-                                            (x) => x._id === product._id
+                                            (x) => x._id === product?._id
                                         )
                                             ? 'REMOVE FROM CART'
                                             : 'ADD TO CART'
@@ -436,7 +436,7 @@ export default function ProductDetails() {
                                     text="WISHLIST"
                                     type={
                                         wishlist.wishlist.find(
-                                            (x) => x._id === product._id
+                                            (x) => x._id === product?._id
                                         )
                                             ? null
                                             : ButtonTypes.OUTLINE
@@ -444,7 +444,7 @@ export default function ProductDetails() {
                                     className="font-bold bg-white border-0  "
                                     PrefixIcon={
                                         wishlist.wishlist.find(
-                                            (x) => x._id === product._id
+                                            (x) => x._id === product?._id
                                         )
                                             ? SolidHeart
                                             : HeartIcon
@@ -533,14 +533,14 @@ export default function ProductDetails() {
                                         to={`/product-detail/${product?.id}`}
                                     >
                                         <ProductCard
-                                            id={product._id.toString()}
-                                            imageUrl={product.imageUrl}
-                                            originalPrice={product.price}
-                                            sellingPrice={product.sellingPrice}
+                                            id={product?._id.toString()}
+                                            imageUrl={product?.imageUrl}
+                                            originalPrice={product?.price}
+                                            sellingPrice={product?.sellingPrice}
                                             productDescription={
-                                                product.productShortDesc
+                                                product?.productShortDesc
                                             }
-                                            productName={product.name}
+                                            productName={product?.name}
                                             product={product}
                                         />
                                     </Link>

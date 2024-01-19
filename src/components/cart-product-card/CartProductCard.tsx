@@ -47,7 +47,13 @@ const CartProductCard = (props: IProps) => {
     return (
         <div className={styles.wrapper}>
             <div className={styles.left}>
-                <img src={props.imageUrl} />
+                <img
+                    src={
+                        props?.imageUrl
+                            ? props.imageUrl
+                            : '/public/product.jpeg'
+                    }
+                />
             </div>
             <div className={styles.right}>
                 <div className={styles.name}>{props.name}</div>
@@ -128,9 +134,11 @@ const CartProductCard = (props: IProps) => {
                     </span>
                     <span className={styles.discount}>
                         (
-                        {((props.originalPrice - props.sellingPrice) /
-                            props.originalPrice) *
-                            100}
+                        {(
+                            ((props.originalPrice - props.sellingPrice) /
+                                props.originalPrice) *
+                            100
+                        ).toFixed(2)}
                         % off)
                     </span>
                 </div>

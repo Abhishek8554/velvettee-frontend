@@ -11,6 +11,7 @@ import { useState } from 'react';
 import Footer from '../../components/footer/Footer';
 import { ErrorMessage, Field, Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import useCart from '../../stores/Cart';
 enum CartSteps {
     CART,
     ADDRESS,
@@ -37,36 +38,12 @@ const CustomLeftArrow = ({ onClick }: any) => {
     );
 };
 const Cart = () => {
+    const cart = useCart();
     const cardNumberRegExp =
         /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$/;
     const cvvRegExp = /^[0-9]{3,4}$/;
-    const [currentSteps, setCurrentSteps] = useState(CartSteps.ADDRESS);
-    const cartItems = [
-        {
-            id: 1,
-            imageUrl: '/public/product.jpeg',
-            originalPrice: 1000,
-            sellingPrice: 100,
-            productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
-            productName: 'shirt',
-        },
-        {
-            id: 2,
-            imageUrl: '/public/product.jpeg',
-            originalPrice: 1000,
-            sellingPrice: 100,
-            productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
-            productName: 'shirt',
-        },
-        {
-            id: 3,
-            imageUrl: '/public/product.jpeg',
-            originalPrice: 1000,
-            sellingPrice: 100,
-            productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
-            productName: 'shirt',
-        },
-    ];
+    const [currentSteps, setCurrentSteps] = useState(CartSteps.CART);
+
     const products = [
         {
             id: 1,
@@ -266,39 +243,21 @@ const Cart = () => {
                     <div className={styles.steps_container}>
                         <div className={`${styles.step} ${styles.step_1}`}>
                             <div className={styles.left}>
-                                <CartProductCard
-                                    imageUrl={cartItems[0].imageUrl}
-                                    name={cartItems[0].productName}
-                                    availableSizes={[36, 38, 40, 42, 44]}
-                                    description="Detail of product: Lorem Ipsum Lorem Ipsum"
-                                    originalPrice={48000}
-                                    sellingPrice={4800}
-                                    selectedSize={32}
-                                    availableQty={10}
-                                    key={1}
-                                />
-                                <CartProductCard
-                                    imageUrl={cartItems[0].imageUrl}
-                                    name={cartItems[0].productName}
-                                    availableSizes={[36, 38, 40, 42, 44]}
-                                    description="Detail of product: Lorem Ipsum Lorem Ipsum"
-                                    originalPrice={48000}
-                                    sellingPrice={4800}
-                                    selectedSize={32}
-                                    availableQty={10}
-                                    key={1}
-                                />
-                                <CartProductCard
-                                    imageUrl={cartItems[0].imageUrl}
-                                    name={cartItems[0].productName}
-                                    availableSizes={[36, 38, 40, 42, 44]}
-                                    description="Detail of product: Lorem Ipsum Lorem Ipsum"
-                                    originalPrice={48000}
-                                    sellingPrice={4800}
-                                    selectedSize={32}
-                                    availableQty={10}
-                                    key={1}
-                                />
+                                {cart.cart.map((cartItem) => (
+                                    <CartProductCard
+                                        imageUrl={cartItem.imageUrl}
+                                        name={cartItem.name}
+                                        availableSizes={cartItem.size}
+                                        description={cartItem.productShortDesc}
+                                        originalPrice={cartItem.price}
+                                        sellingPrice={cartItem.sellingPrice}
+                                        selectedSize={32}
+                                        availableQty={
+                                            cartItem.availableQuantity
+                                        }
+                                        key={cartItem._id}
+                                    />
+                                ))}
                             </div>
                             <div className={styles.right}>
                                 <div className={styles.pricing_details}>
@@ -424,6 +383,7 @@ const Cart = () => {
                                                 productName={
                                                     product.productName
                                                 }
+                                                product={product}
                                             />
                                         </Link>
                                     ))}
