@@ -8,6 +8,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import useApi from '../../hooks/useApi';
 import useLoader from '../../stores/FullPageLoader';
+import { ItemCategory } from '../../enums/ItemCategory';
 const ProductListing = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [showMoreLoader, setShowMoreLoader] = useState(false);
@@ -21,7 +22,7 @@ const ProductListing = () => {
         if (initialDataLoad) {
             loader.showFullPageLoader();
         }
-        api.get(`/products/productlist/${currentPage}/2`)
+        api.get(`/products/productlist/${ItemCategory.SHIRT}/${currentPage}/2`)
             .then((data) => {
                 setProducts((pre: any) => {
                     if (pre && pre.length) {

@@ -252,6 +252,7 @@ const Cart = () => {
                                         originalPrice={cartItem.price}
                                         sellingPrice={cartItem.sellingPrice}
                                         selectedSize={32}
+                                        product={cartItem}
                                         availableQty={
                                             cartItem.availableQuantity
                                         }

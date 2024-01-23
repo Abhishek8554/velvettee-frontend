@@ -5,6 +5,8 @@ import Button, { ButtonTypes } from '../Button';
 import { HeartIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { Menu, MenuItem } from '@mui/material';
+// import useCart from '../../stores/Cart';
+import useWishlist from '../../stores/Wishlist';
 
 interface IProps {
     imageUrl: string;
@@ -15,9 +17,13 @@ interface IProps {
     availableQty: number;
     originalPrice: number;
     sellingPrice: number;
+    product: any;
+    isWishlistScreen?: boolean;
 }
 
 const CartProductCard = (props: IProps) => {
+    // const cart = useCart();
+    const wishlist = useWishlist();
     const [selectedSize, setSelectedSize] = useState(props.selectedSize);
     const [selectedQty, setSelectedQty] = useState(1);
     const quantitlyOptions = [...new Array(props.availableQty).keys()].map(
@@ -58,74 +64,77 @@ const CartProductCard = (props: IProps) => {
             <div className={styles.right}>
                 <div className={styles.name}>{props.name}</div>
                 <div className={styles.description}>{props.description}</div>
-                <div className={styles.dropdown_container}>
-                    <div
-                        className={styles.dropdown}
-                        id="size-btn"
-                        aria-controls={openSize ? 'size-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={openSize ? 'true' : undefined}
-                        onClick={handleClick}
-                    >
-                        Size: {selectedSize}
-                        <div className={styles.dropdown_icon}>
-                            <ChevronDownIcon />
-                        </div>
-                    </div>
-                    <Menu
-                        id="size-menu"
-                        anchorEl={sizeAnchorEl}
-                        open={openSize}
-                        onClose={handleClose}
-                        MenuListProps={{
-                            'aria-labelledby': 'basic-button',
-                        }}
-                    >
-                        {props.availableSizes.map((size) => (
-                            <MenuItem
-                                onClick={() => {
-                                    handleClose();
-                                    handleSelection('size', size);
-                                }}
-                            >
-                                {size}
-                            </MenuItem>
-                        ))}
-                    </Menu>
-                    <div
-                        className={styles.dropdown}
-                        id="qty-btn"
-                        aria-controls={openQty ? 'qty-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={openQty ? 'true' : undefined}
-                        onClick={handleClick}
-                    >
-                        Qty: {selectedQty}
-                        <div className={styles.dropdown_icon}>
-                            <ChevronDownIcon />
+                {!props.isWishlistScreen && (
+                    <div className={styles.dropdown_container}>
+                        <div
+                            className={styles.dropdown}
+                            id="size-btn"
+                            aria-controls={openSize ? 'size-menu' : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={openSize ? 'true' : undefined}
+                            onClick={handleClick}
+                        >
+                            Size: {selectedSize}
+                            <div className={styles.dropdown_icon}>
+                                <ChevronDownIcon />
+                            </div>
                         </div>
                         <Menu
-                            id="qty-menu"
-                            anchorEl={qtyAnchorEl}
-                            open={openQty}
+                            id="size-menu"
+                            anchorEl={sizeAnchorEl}
+                            open={openSize}
                             onClose={handleClose}
                             MenuListProps={{
                                 'aria-labelledby': 'basic-button',
                             }}
                         >
-                            {quantitlyOptions.map((qty) => (
+                            {props.availableSizes.map((size) => (
                                 <MenuItem
                                     onClick={() => {
                                         handleClose();
-                                        handleSelection('qty', qty);
+                                        handleSelection('size', size);
                                     }}
                                 >
-                                    {qty}
+                                    {size}
                                 </MenuItem>
                             ))}
                         </Menu>
+                        <div
+                            className={styles.dropdown}
+                            id="qty-btn"
+                            aria-controls={openQty ? 'qty-menu' : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={openQty ? 'true' : undefined}
+                            onClick={handleClick}
+                        >
+                            Qty: {selectedQty}
+                            <div className={styles.dropdown_icon}>
+                                <ChevronDownIcon />
+                            </div>
+                            <Menu
+                                id="qty-menu"
+                                anchorEl={qtyAnchorEl}
+                                open={openQty}
+                                onClose={handleClose}
+                                MenuListProps={{
+                                    'aria-labelledby': 'basic-button',
+                                }}
+                            >
+                                {quantitlyOptions.map((qty) => (
+                                    <MenuItem
+                                        onClick={() => {
+                                            handleClose();
+                                            handleSelection('qty', qty);
+                                        }}
+                                    >
+                                        {qty}
+                                    </MenuItem>
+                                ))}
+                            </Menu>
+                        </div>
                     </div>
-                </div>
+                )}
+
                 <div className={styles.price_container}>
                     <span className={styles.currency}>₹</span>
                     <span className={styles.amount}>{props.sellingPrice}</span>
@@ -147,12 +156,24 @@ const CartProductCard = (props: IProps) => {
                         text="Remove"
                         type={ButtonTypes.TEXT}
                         PrefixIcon={TrashIcon}
+                        onClick={() => {
+                            if (props.isWishlistScreen) {
+                                wishlist.remove(props.product._id);
+                            } else {
+                                // Handle Cart here
+                            }
+                        }}
                     />
-                    <Button
-                        text="Move to Wishlist"
-                        type={ButtonTypes.TEXT}
-                        PrefixIcon={HeartIcon}
-                    />
+                    {!props.isWishlistScreen && (
+                        <Button
+                            text="Move to Wishlist"
+                            type={ButtonTypes.TEXT}
+                            PrefixIcon={HeartIcon}
+                            onClick={() => {
+                                wishlist.add(props.product);
+                            }}
+                        />
+                    )}
                 </div>
             </div>
         </div>

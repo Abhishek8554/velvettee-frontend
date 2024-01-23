@@ -74,7 +74,8 @@ const Header = () => {
                         <div onClick={logout} className={styles.button_icon}>
                             <UserIcon />
                         </div>
-                        <div
+                        <Link
+                            to={'/wishlist'}
                             className={`${styles.button_icon} ${styles.wishlist}`}
                         >
                             <HeartIcon />
@@ -83,7 +84,7 @@ const Header = () => {
                             ) : (
                                 ''
                             )}
-                        </div>
+                        </Link>
                         <Link
                             to="/cart"
                             className={`${styles.button_icon} ${styles.cart}`}

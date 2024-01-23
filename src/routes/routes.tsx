@@ -9,18 +9,20 @@ import ForgotPassword from '../screens/ForgotPassword';
 import ProductListing from '../screens/product-listing/ProductListing';
 import ProductDetails from '../screens/product-details/ProductDetails';
 import Cart from '../screens/cart/Cart';
+import useAuthStore from '../stores/Auth';
+import Wishlist from '../screens/wishlist/Wishlist';
 
 const redirectToHome = (): JSX.Element => {
-    const auth = JSON.parse(localStorage.getItem('ve-auth-storage') as string);
-    if (auth.state.token) {
+    const auth = useAuthStore.getState();
+    if (auth.token) {
         return <SignedInLandingPage />;
     }
     return <LandingPage />;
 };
 
 const onlyNonLoginRoutes = (Component: React.FC): JSX.Element => {
-    const auth = JSON.parse(localStorage.getItem('ve-auth-storage') as string);
-    if (auth.state.token) {
+    const auth = useAuthStore.getState();
+    if (auth.token) {
         return redirectToHome();
     }
     return <Component />;
@@ -54,6 +56,10 @@ export const router = createBrowserRouter([
     {
         path: '/cart',
         element: <Cart />,
+    },
+    {
+        path: '/wishlist',
+        element: <Wishlist />,
     },
 
     {
