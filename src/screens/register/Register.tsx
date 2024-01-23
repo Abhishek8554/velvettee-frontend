@@ -2,16 +2,14 @@ import styles from './Register.module.scss';
 import { Formik, Field, ErrorMessage, Form } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import { SnackBarTypes } from '../../enums/SnackBarTypes';
-import useAuthStore from '../../stores/Auth';
 import useSnackBar from '../../stores/Snackbar';
 import * as Yup from 'yup';
 import Card from '../../components/Card';
 import Button, { ButtonTypes } from '../../components/Button';
 import { useState } from 'react';
-import useApi from '../../hooks/useApi';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import useLoader from '../../stores/FullPageLoader';
-import { environment } from '../../environments/environment';
+import useUserService from '../../stores/UserService';
 
 interface Values {
     email: string;
@@ -20,13 +18,12 @@ interface Values {
 }
 
 export default function Register() {
-    const { setToken, setUser } = useAuthStore();
     const navigate = useNavigate();
+    const userService = useUserService();
     const snackBarService = useSnackBar();
     const [showPassword, setShowPassword] = useState<{
         [name: string]: boolean;
     }>({});
-    const api = useApi();
     const loaderService = useLoader();
 
     const initialValues: Values = {
@@ -48,20 +45,18 @@ export default function Register() {
 
     const handleSubmit = (values: Values) => {
         loaderService.showFullPageLoader();
-        api.post('/register', {
-            email: values.email,
-            password: values.password,
-        })
-            .then((res) => {
-                setToken(res.data.token as string);
-                setUser(res.data);
+        userService.register(
+            values.email,
+            values.password,
+            () => {
                 loaderService.hideFullPageLoader();
                 navigate('/');
-            })
-            .catch((err) => {
+            },
+            (err) => {
                 snackBarService.open(err.message, SnackBarTypes.DANGER);
                 loaderService.hideFullPageLoader();
-            });
+            }
+        );
     };
 
     return (
@@ -269,10 +264,7 @@ export default function Register() {
                     </p>
                     <Button
                         onClick={() => {
-                            window.open(
-                                environment.baseUrl + 'auth/google/callback',
-                                '_self'
-                            );
+                            userService.loginWithGoogle();
                         }}
                         type={ButtonTypes.OUTLINE}
                         className={styles.google_btn}

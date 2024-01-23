@@ -3,15 +3,13 @@ import styles from './Login.module.scss';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Button, { ButtonTypes } from '../../components/Button';
-import useAuthStore from '../../stores/Auth';
 import useSnackBar from '../../stores/Snackbar';
 import { Link, useNavigate } from 'react-router-dom';
 import { SnackBarTypes } from '../../enums/SnackBarTypes';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
-import useApi from '../../hooks/useApi';
 import useLoader from '../../stores/FullPageLoader';
-import { environment } from '../../environments/environment';
+import useUserService from '../../stores/UserService';
 
 interface Values {
     email: string;
@@ -19,13 +17,12 @@ interface Values {
 }
 
 export default function Login() {
-    const api = useApi();
+    const userService = useUserService();
     const navigate = useNavigate();
     const loaderService = useLoader();
     const [showPassword, setShowPassword] = useState<{
         [name: string]: boolean;
     }>({});
-    const { setToken, setUser } = useAuthStore();
     const snackBarService = useSnackBar();
     const initialValues: Values = {
         email: '',
@@ -41,33 +38,30 @@ export default function Login() {
 
     const handleSubmit = (values: Values) => {
         loaderService.showFullPageLoader();
-        api.post('/login', { email: values.email, password: values.password })
-            .then((res) => {
-                setToken(res.data.token);
-                setUser(res.data);
+        userService.login(
+            values.email,
+            values.password,
+            () => {
                 loaderService.hideFullPageLoader();
                 navigate('/');
-            })
-            .catch((err) => {
-                snackBarService.open(err.message, SnackBarTypes.DANGER);
+            },
+            (error) => {
+                snackBarService.open(error.message, SnackBarTypes.DANGER);
                 loaderService.hideFullPageLoader();
-            });
+            }
+        );
     };
     const loginWithGoogle = () => {
-        window.open(environment.baseUrl + 'auth/google/callback', '_self');
+        userService.loginWithGoogle();
     };
 
-    const getGoogleUser = async () => {
-        try {
-            const response = await api.get('/login-success', {
-                withCredentials: true,
-            });
-            setToken(response.data.user.token);
-            setUser(response.data.user);
-            navigate('/');
-        } catch (error) {
-            console.error(error);
-        }
+    const getGoogleUser = () => {
+        userService.checkGoogleLogin(
+            () => {
+                navigate('/');
+            },
+            () => {}
+        );
     };
 
     useEffect(() => {

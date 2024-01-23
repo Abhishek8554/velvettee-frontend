@@ -12,12 +12,13 @@ import {
     UserIcon,
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
-import { environment } from '../../environments/environment';
 import useWishlist from '../../stores/Wishlist';
 import useCart from '../../stores/Cart';
+import useUserService from '../../stores/UserService';
 const Header = () => {
     const navigate = useNavigate();
     const authStore = useAuthStore();
+    const userService = useUserService();
     const [inputValue, setInputValue] = useState('');
     const wishlist = useWishlist();
     const cart = useCart();
@@ -32,9 +33,7 @@ const Header = () => {
         }
     };
     const logout = () => {
-        window.open(environment.baseUrl + 'logout', '_self');
-        authStore.setToken('');
-        authStore.setUser(undefined);
+        userService.logout();
     };
     return (
         <>

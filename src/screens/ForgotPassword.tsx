@@ -10,6 +10,8 @@ import useSnackBar from '../stores/Snackbar';
 import { SnackBarTypes } from '../enums/SnackBarTypes';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import useLoader from '../stores/FullPageLoader';
+import ApiUrls from '../constants/ApiUrls';
+import useUserService from '../stores/UserService';
 
 interface ForgotPasswordFormFields {
     email: string;
@@ -38,6 +40,7 @@ export default function ForgotPassword() {
     }>({});
     const snackBarService = useSnackBar();
     const api = useApi();
+    const userService = useUserService();
     const loaderService = useLoader();
     const navigate = useNavigate();
     const [otpFormFields, setOtpFormFields] = useState<OtpValues>({
@@ -70,7 +73,7 @@ export default function ForgotPassword() {
     const handleSubmitSendEmail = (values: ForgotPasswordFormFields) => {
         setForgotPasswordFormValue(values);
         loaderService.showFullPageLoader();
-        api.post('/forgot-password', { email: values.email })
+        api.post(ApiUrls.FORGOT_PASSWORD, { email: values.email })
             .then(() => {
                 setForgotPasswordStage(2);
                 loaderService.hideFullPageLoader();
@@ -83,7 +86,7 @@ export default function ForgotPassword() {
 
     const handleSubmitOtpValue = () => {
         loaderService.showFullPageLoader();
-        api.post('/verify-otp', {
+        api.post(ApiUrls.VERIFY_OTP, {
             otp:
                 otpFormFields.value1 +
                 otpFormFields.value2 +
@@ -106,20 +109,19 @@ export default function ForgotPassword() {
         cnfPassword: string;
         password: string;
     }) => {
-        console.log(1);
         loaderService.showFullPageLoader();
-        api.post('/reset-password', {
-            email: forgotPasswordFormValue.email,
-            password: values.password,
-        })
-            .then(() => {
+        userService.resetPassword(
+            forgotPasswordFormValue.email,
+            values.password,
+            () => {
                 loaderService.hideFullPageLoader();
                 navigate('/login');
-            })
-            .catch((err) => {
+            },
+            (err) => {
                 loaderService.hideFullPageLoader();
                 snackBarService.open(err.message, SnackBarTypes.DANGER);
-            });
+            }
+        );
     };
 
     const handleOtpInputChange = (

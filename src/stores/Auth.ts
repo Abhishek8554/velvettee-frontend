@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import useWishlist from './Wishlist';
 import useApi from '../hooks/useApi';
+import useUserService from './UserService';
 
 export interface IUserData {
     _id: string;
@@ -30,6 +31,7 @@ const useAuthStore = create<AuthState>()(
                 setToken: (token: string | undefined) => set({ token }),
                 user: undefined,
                 setUser: (user: IUserData | undefined) => {
+                    const userService = useUserService.getState();
                     const wishlist = useWishlist.getState();
                     if (user?.products?.length) {
                         user.products.map((id: string) => {
@@ -40,6 +42,7 @@ const useAuthStore = create<AuthState>()(
                             );
                         });
                     }
+                    userService.setUserData(user);
                     return set({
                         user,
                     });
