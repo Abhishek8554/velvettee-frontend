@@ -12,38 +12,52 @@ import Cart from '../screens/cart/Cart';
 import useAuthStore from '../stores/Auth';
 import Wishlist from '../screens/wishlist/Wishlist';
 
-const redirectToHome = (): JSX.Element => {
-    const auth = useAuthStore.getState();
+const RedirectToHome = () => {
+    const auth = useAuthStore();
     if (auth.token) {
         return <SignedInLandingPage />;
     }
     return <LandingPage />;
 };
 
-const onlyNonLoginRoutes = (Component: React.FC): JSX.Element => {
-    const auth = useAuthStore.getState();
-    if (auth.token) {
-        return redirectToHome();
+type RouteComponentProps = {
+    Component: React.FC;
+};
+
+const NonLoginRoutes = ({ Component }: RouteComponentProps) => {
+    const authStore = useAuthStore();
+    if (authStore.token) {
+        return <Navigate to={'/'} />;
+    } else {
+        return <Component />;
     }
-    return <Component />;
+};
+
+const ProtectedRoute = ({ Component }: RouteComponentProps) => {
+    const authStore = useAuthStore();
+    if (!authStore.token) {
+        return <Navigate to={'/'} />;
+    } else {
+        return <Component />;
+    }
 };
 
 export const router = createBrowserRouter([
     {
         path: '/',
-        element: redirectToHome(),
+        element: <RedirectToHome />,
     },
     {
         path: '/login',
-        element: onlyNonLoginRoutes(Login),
+        element: <NonLoginRoutes Component={Login} />,
     },
     {
         path: '/signup',
-        element: onlyNonLoginRoutes(Register),
+        element: <NonLoginRoutes Component={Register} />,
     },
     {
         path: 'forgot-password',
-        element: onlyNonLoginRoutes(ForgotPassword),
+        element: <NonLoginRoutes Component={ForgotPassword} />,
     },
     {
         path: '/products/:search',
@@ -55,11 +69,11 @@ export const router = createBrowserRouter([
     },
     {
         path: '/cart',
-        element: <Cart />,
+        element: <ProtectedRoute Component={Cart} />,
     },
     {
         path: '/wishlist',
-        element: <Wishlist />,
+        element: <ProtectedRoute Component={Wishlist} />,
     },
 
     {
