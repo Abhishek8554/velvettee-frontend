@@ -10,4 +10,11 @@ export default class ApiUrls {
     static FORGOT_PASSWORD = '/forgot-password';
     static VERIFY_OTP = '/verify-otp';
     static RESET_PASSWORD = '/reset-password';
+    static CART_DETAILS = '/cart/getCartItems/{userId}';
+    static ADD_ADDRESS = '/users/{userId}/addaddresses';
+    static GET_ADDRESS = '/users/{userId}/addresses';
+    static CART_SIMILAR_PRODUCTS = '/cart/similarProducts';
+    static CART_UPDATE_PRODUCTS = '/cart/updateCartItem';
+    static DELETE_ADDRESS = '/users/{userId}/addresses/{addressId}';
+    static UPDATE_ADDRESS = '/users/{userId}/updateaddresses';
 }

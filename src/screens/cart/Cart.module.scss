@@ -218,3 +218,53 @@ input[type='radio'] {
         padding: 1em 0.5em;
     }
 }
+.error {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+}
+.back {
+    width: 200px;
+    margin-top: 30px;
+}
+.msg {
+    font-size: 4rem;
+    color: #c4c4c4;
+}
+
+.address_card_wrapper {
+    padding: 15px;
+    border: 1px solid #c4c4c4;
+    border-radius: inherit;
+    cursor: pointer;
+    .name {
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    .address {
+        color: grey;
+        margin-bottom: 20px;
+    }
+    .mobile {
+        display: flex;
+        .mobile_num {
+            font-weight: 600;
+            margin-left: 10px;
+        }
+    }
+    .btn_container {
+        margin-top: 25px;
+        display: flex;
+        gap: 10px;
+        .address_card_btn {
+            width: 150px;
+            color: black;
+        }
+    }
+}
+
+.selected_address {
+    border: 3px solid var(--primary-color);
+}

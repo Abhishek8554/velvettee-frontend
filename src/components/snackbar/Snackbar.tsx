@@ -10,7 +10,7 @@ const Snackbar = () => {
                 snackBarService.close();
             }}
             className={snackBarService.type}
-            autoHideDuration={3000}
+            autoHideDuration={2000}
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
             <SnackbarContent

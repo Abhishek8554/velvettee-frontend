@@ -25,12 +25,7 @@ const ProductCard = (props: Props) => {
     return (
         <div className={styles.wrapper}>
             <div className={styles.image_container}>
-                <img
-                    src={
-                        props.imageUrl ? props.imageUrl : '/public/product.jpeg'
-                    }
-                    alt={props.productName}
-                />
+                <img src={props.imageUrl} alt={props.productName} />
                 <div className={styles.wishlist_icon}>
                     {' '}
                     {wishlist.wishlist.find((x) => x._id === props.id) ? (

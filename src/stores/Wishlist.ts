@@ -3,6 +3,8 @@
 import { create } from 'zustand';
 import useApi from '../hooks/useApi';
 import useAuthStore from './Auth';
+import useSnackBar from './Snackbar';
+import { SnackBarTypes } from '../enums/SnackBarTypes';
 
 interface IWishlist {
     wishlist: any[];
@@ -17,19 +19,31 @@ const useWishlist = create<IWishlist>()((set) => {
         add: (product: any) =>
             set((state) => {
                 const authStore = useAuthStore.getState();
+                const snackBarService = useSnackBar.getState();
                 if (authStore.token && authStore.user) {
                     api.put('/products/addfavoriteproducts', {
                         userId: authStore.user._id,
                         newProductId: product._id,
                     });
-                    return { ...state, wishlist: [...state.wishlist, product] };
+                    if (!state.wishlist.find((x) => x._id === product._id)) {
+                        return {
+                            ...state,
+                            wishlist: [...state.wishlist, product],
+                        };
+                    }
+                    return { ...state };
                 } else {
+                    snackBarService.open(
+                        'You are not Logged in',
+                        SnackBarTypes.INFO
+                    );
                     return { ...state };
                 }
             }),
         remove: (id: string) =>
             set((state) => {
                 const authStore = useAuthStore.getState();
+                const snackBarService = useSnackBar.getState();
                 if (authStore.token && authStore.user) {
                     api.delete(
                         `/products/removeproduct/${authStore.user._id}/${id}`
@@ -39,6 +53,10 @@ const useWishlist = create<IWishlist>()((set) => {
                         wishlist: state.wishlist.filter((x) => x._id !== id),
                     };
                 } else {
+                    snackBarService.open(
+                        'You are not Logged in',
+                        SnackBarTypes.INFO
+                    );
                     return { ...state };
                 }
             }),

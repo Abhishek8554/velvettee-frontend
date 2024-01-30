@@ -28,7 +28,12 @@ const Button: React.FC<ButtonProps> = ({
     if (!type) {
         return (
             <button
-                onClick={() => (onClick ? onClick() : '')}
+                onClick={(e: any) => {
+                    e.stopPropagation();
+                    if (onClick) {
+                        onClick();
+                    }
+                }}
                 type="submit"
                 className={`bg-blue-500 text-white p-2 rounded-md w-full sm:w-auto default-button flex items-center justify-center ${className}`}
             >
@@ -51,7 +56,12 @@ const Button: React.FC<ButtonProps> = ({
     if (type === ButtonTypes.OUTLINE) {
         return (
             <button
-                onClick={() => (onClick ? onClick() : '')}
+                onClick={(e: any) => {
+                    e.stopPropagation();
+                    if (onClick) {
+                        onClick();
+                    }
+                }}
                 type="submit"
                 className={`border-2 font-medium border-current p-2 rounded-md w-full sm:w-auto outline-button flex items-center justify-center color-primary ${className}`}
             >
@@ -74,7 +84,12 @@ const Button: React.FC<ButtonProps> = ({
     if (type === ButtonTypes.TEXT) {
         return (
             <button
-                onClick={() => (onClick ? onClick() : '')}
+                onClick={(e: any) => {
+                    e.stopPropagation();
+                    if (onClick) {
+                        onClick();
+                    }
+                }}
                 type="submit"
                 className={` font-medium border-current p-2 rounded-md w-full sm:w-auto outline-button flex items-center justify-center color-primary ${className}`}
             >

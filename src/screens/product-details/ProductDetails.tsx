@@ -10,8 +10,7 @@ import 'react-multi-carousel/lib/styles.css';
 import { HeartIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as SolidHeart } from '@heroicons/react/24/solid';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import useAuthStore from '../../stores/Auth';
+import { Link, useParams } from 'react-router-dom';
 import useApi from '../../hooks/useApi';
 import useSnackBar from '../../stores/Snackbar';
 import { SnackBarTypes } from '../../enums/SnackBarTypes';
@@ -39,27 +38,30 @@ const CustomLeftArrow = ({ onClick }: any) => {
     );
 };
 export default function ProductDetails() {
-    const auth = useAuthStore();
-    const navigate = useNavigate();
-    const [product, setProduct] = useState<any>(null);
+    const [product, setProduct] = useState<any>({});
     const [similarProducts, setSimilarProducts] = useState<any[] | null>(null);
     const [sizes, setSizes] = useState<number[] | []>([]);
 
-    const imagePath = '/public/product.jpeg';
     const params = useParams();
     const api = useApi();
     const wishlist = useWishlist();
     const cart = useCart();
     const snackbar = useSnackBar();
-    const [currentImage, setCurrentImage] = useState<string>(imagePath);
-    const [selectedSize, setSelectedSize] = useState<number>(28);
+    const [currentImage, setCurrentImage] = useState<string>('');
+    const [selectedSize, setSelectedSize] = useState<number>(0);
     const [quantity, setQuantity] = useState<number>(1);
+    const [selectedColor, setSelectedColor] = useState<string>('');
     const fetchProduct = (id: string, isSimilar = false) => {
         api.get(`/products/getproductbyid/${id}`)
             .then((product) => {
                 if (!isSimilar) {
                     setProduct(product?.data);
+                    setCurrentImage(
+                        product?.data?.colorImages[product?.data?.colors[0]][0]
+                    );
+                    setSelectedColor(product?.data?.colors[0]);
                     setSizes(product?.data?.size);
+                    setSelectedSize(product?.data?.size[0]);
                 } else {
                     setSimilarProducts((pre) => {
                         if (pre) {
@@ -81,7 +83,7 @@ export default function ProductDetails() {
         if (
             product &&
             product.similarProducts &&
-            product.similarProducts.length
+            product.similarProducts?.length
         ) {
             product.similarProducts.map((id: string) => {
                 fetchProduct(id, true);
@@ -90,28 +92,18 @@ export default function ProductDetails() {
     }, [product]);
 
     const onAddToCart = () => {
-        if (auth.token) {
-            // Continue and add to wishlist
-            if (cart.cart.find((x) => x._id === product?._id)) {
-                cart.remove(product?._id);
-            } else {
-                cart.add(product);
-            }
+        if (cart.cart.find((x) => x.product._id === product?._id)) {
+            cart.remove(product?._id);
         } else {
-            navigate('/signup');
+            cart.add(product, selectedSize, selectedColor, quantity);
         }
     };
 
     const onWishlist = () => {
-        if (auth.token) {
-            // Continue and add to wishlist
-            if (wishlist.wishlist.find((x) => x._id === product?._id)) {
-                wishlist.remove(product?._id);
-            } else {
-                wishlist.add(product);
-            }
+        if (wishlist.wishlist.find((x) => x._id === product?._id)) {
+            wishlist.remove(product?._id);
         } else {
-            navigate('/signup');
+            wishlist.add(product);
         }
     };
     const onQuantity = (type: 'increment' | 'decrement') => {
@@ -161,46 +153,25 @@ export default function ProductDetails() {
                     >
                         <div className="flex">
                             <div className={`mb-4 w-14 ${styles.small_images}`}>
-                                <img
-                                    src={imagePath}
-                                    onClick={() => setCurrentImage(imagePath)}
-                                    alt="Product Thumbnail"
-                                    className={
-                                        imagePath == currentImage
-                                            ? 'w-14 h-auto  border-primary border-4'
-                                            : 'w-14 h-auto'
-                                    }
-                                />
-                                <img
-                                    src={imagePath}
-                                    onClick={() => setCurrentImage(imagePath)}
-                                    alt="Product Thumbnail"
-                                    className={
-                                        imagePath == currentImage
-                                            ? 'w-14 h-auto  border-primary border-2'
-                                            : 'w-14 h-auto'
-                                    }
-                                />
-                                <img
-                                    src={imagePath}
-                                    onClick={() => setCurrentImage(imagePath)}
-                                    alt="Product Thumbnail"
-                                    className={
-                                        imagePath == currentImage
-                                            ? 'w-14 h-auto  border-primary border-2'
-                                            : 'w-14 h-auto'
-                                    }
-                                />
-                                <img
-                                    src={imagePath}
-                                    onClick={() => setCurrentImage(imagePath)}
-                                    alt="Product Thumbnail"
-                                    className={
-                                        imagePath == currentImage
-                                            ? 'w-14 h-auto border-primary border-2'
-                                            : 'w-14 h-auto'
-                                    }
-                                />
+                                {product &&
+                                    product.colorImages &&
+                                    product.colors &&
+                                    product?.colorImages[selectedColor]?.map(
+                                        (imagePath: string) => (
+                                            <img
+                                                src={imagePath}
+                                                onClick={() =>
+                                                    setCurrentImage(imagePath)
+                                                }
+                                                alt="Product Thumbnail"
+                                                className={
+                                                    imagePath == currentImage
+                                                        ? 'w-14 h-auto  border-primary border-4'
+                                                        : 'w-14 h-auto'
+                                                }
+                                            />
+                                        )
+                                    )}
                             </div>
 
                             <div className="flex-1">
@@ -216,74 +187,69 @@ export default function ProductDetails() {
                     <div
                         className={`w-1/2 ${styles.left_container} ${styles.mobile_container}`}
                     >
-                        <Carousel
-                            additionalTransfrom={0}
-                            autoPlaySpeed={3000}
-                            centerMode={false}
-                            containerClass="carousel-container w-full"
-                            dotListClass=""
-                            draggable
-                            focusOnSelect={false}
-                            infinite
-                            keyBoardControl
-                            minimumTouchDrag={80}
-                            pauseOnHover
-                            renderButtonGroupOutside={false}
-                            renderDotsOutside={false}
-                            responsive={{
-                                desktop: {
-                                    breakpoint: {
-                                        max: 3000,
-                                        min: 1024,
+                        {product && product.colors && product?.colorImages && (
+                            <Carousel
+                                additionalTransfrom={0}
+                                autoPlaySpeed={3000}
+                                centerMode={false}
+                                containerClass="carousel-container w-full"
+                                dotListClass=""
+                                draggable
+                                focusOnSelect={false}
+                                infinite
+                                keyBoardControl
+                                minimumTouchDrag={80}
+                                pauseOnHover
+                                renderButtonGroupOutside={false}
+                                renderDotsOutside={false}
+                                responsive={{
+                                    desktop: {
+                                        breakpoint: {
+                                            max: 3000,
+                                            min: 1024,
+                                        },
+                                        items: 1,
+                                        partialVisibilityGutter: 40,
                                     },
-                                    items: 1,
-                                    partialVisibilityGutter: 40,
-                                },
-                                mobile: {
-                                    breakpoint: {
-                                        max: 464,
-                                        min: 0,
+                                    mobile: {
+                                        breakpoint: {
+                                            max: 464,
+                                            min: 0,
+                                        },
+                                        items: 1,
+                                        partialVisibilityGutter: 30,
                                     },
-                                    items: 1,
-                                    partialVisibilityGutter: 30,
-                                },
-                                tablet: {
-                                    breakpoint: {
-                                        max: 1024,
-                                        min: 464,
+                                    tablet: {
+                                        breakpoint: {
+                                            max: 1024,
+                                            min: 464,
+                                        },
+                                        items: 1,
+                                        partialVisibilityGutter: 30,
                                     },
-                                    items: 1,
-                                    partialVisibilityGutter: 30,
-                                },
-                            }}
-                            rewind={false}
-                            rewindWithAnimation={false}
-                            rtl={false}
-                            shouldResetAutoplay
-                            showDots
-                            slidesToSlide={1}
-                            swipeable
-                            arrows={false}
-                        >
-                            <div className={styles.carousel_image_container}>
-                                <img src={imagePath} />
-                            </div>
-                            <div className={styles.carousel_image_container}>
-                                <img src={imagePath} />
-                            </div>
-                            <div className={styles.carousel_image_container}>
-                                <img src={imagePath} />
-                            </div>
-                            <div className={styles.carousel_image_container}>
-                                <img src={imagePath} />
-                            </div>
-                            <div className={styles.carousel_image_container}>
-                                <img src={imagePath} />
-                            </div>
-                            <div className={styles.carousel_image_container}>
-                                <img src={imagePath} />
-                            </div>
-                        </Carousel>
+                                }}
+                                rewind={false}
+                                rewindWithAnimation={false}
+                                rtl={false}
+                                shouldResetAutoplay
+                                showDots
+                                slidesToSlide={1}
+                                swipeable
+                                arrows={false}
+                            >
+                                {product?.colorImages[product?.colors[0]].map(
+                                    (imagePath: string) => (
+                                        <div
+                                            className={
+                                                styles.carousel_image_container
+                                            }
+                                        >
+                                            <img src={imagePath} />
+                                        </div>
+                                    )
+                                )}
+                            </Carousel>
+                        )}
                     </div>
 
                     <div
@@ -327,46 +293,24 @@ export default function ProductDetails() {
                         <div className="text-xs font-bold mb-8">
                             <p> MORE COLOR </p>
                             <div className="flex mt-3">
-                                <img
-                                    src={imagePath}
-                                    onClick={() => setCurrentImage(imagePath)}
-                                    alt="Product Thumbnail"
-                                    className={
-                                        imagePath == currentImage
-                                            ? 'w-14 h-auto border border-primary border-4'
-                                            : 'w-14 h-auto'
-                                    }
-                                />
-                                <img
-                                    src={imagePath}
-                                    onClick={() => setCurrentImage(imagePath)}
-                                    alt="Product Thumbnail"
-                                    className={
-                                        imagePath == currentImage
-                                            ? 'w-14 ml-4 h-auto border border-primary border-2'
-                                            : 'w-14 h-auto'
-                                    }
-                                />
-                                <img
-                                    src={imagePath}
-                                    onClick={() => setCurrentImage(imagePath)}
-                                    alt="Product Thumbnail"
-                                    className={
-                                        imagePath == currentImage
-                                            ? 'w-14 ml-4 h-auto border border-primary border-2'
-                                            : 'w-14 h-auto'
-                                    }
-                                />
-                                <img
-                                    src={imagePath}
-                                    onClick={() => setCurrentImage(imagePath)}
-                                    alt="Product Thumbnail"
-                                    className={
-                                        imagePath == currentImage
-                                            ? 'w-14 ml-4 h-auto border border-primary border-2'
-                                            : 'w-14 h-auto'
-                                    }
-                                />
+                                {product?.colors?.map((color: string) => (
+                                    <img
+                                        src={product['colorImages'][color][0]}
+                                        onClick={() => {
+                                            setCurrentImage(
+                                                product['colorImages'][color][0]
+                                            );
+                                            setSelectedColor(color);
+                                        }}
+                                        alt="Product Thumbnail"
+                                        className={
+                                            product['colorImages'][color][0] ===
+                                            currentImage
+                                                ? 'w-14 h-auto border border-primary border-4'
+                                                : 'w-14 h-auto'
+                                        }
+                                    />
+                                ))}
                             </div>
                         </div>
 
@@ -421,7 +365,8 @@ export default function ProductDetails() {
                                 <Button
                                     text={
                                         cart.cart.find(
-                                            (x) => x._id === product?._id
+                                            (x) =>
+                                                x.product._id === product?._id
                                         )
                                             ? 'REMOVE FROM CART'
                                             : 'ADD TO CART'
@@ -466,7 +411,7 @@ export default function ProductDetails() {
 
                 <hr />
             </div>
-            {similarProducts && similarProducts.length ? (
+            {similarProducts && similarProducts?.length ? (
                 <div className={`container mx-auto mb-8`}>
                     <p className="text-l font-bold"> Similar styles </p>
 
@@ -527,7 +472,7 @@ export default function ProductDetails() {
                             customRightArrow={<CustomRightArrow />}
                         >
                             {similarProducts &&
-                                similarProducts.map((product) => (
+                                similarProducts?.map((product) => (
                                     <Link
                                         className="mx-4 inline-block"
                                         to={`/product-detail/${product?.id}`}

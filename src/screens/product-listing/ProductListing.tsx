@@ -22,7 +22,7 @@ const ProductListing = () => {
         if (initialDataLoad) {
             loader.showFullPageLoader();
         }
-        api.get(`/products/productlist/${ItemCategory.SHIRT}/${currentPage}/2`)
+        api.get(`/products/productlist/${ItemCategory.SHIRT}/${currentPage}/10`)
             .then((data) => {
                 setProducts((pre: any) => {
                     if (pre && pre.length) {
@@ -44,6 +44,13 @@ const ProductListing = () => {
     useEffect(() => {
         fetchProducts();
     }, [currentPage]);
+
+    useEffect(() => {
+        setCurrentPage(1);
+        setInitialDataLoad(true);
+        setProducts([]);
+        fetchProducts();
+    }, [params.search]);
     const handleShowMore = () => {
         setShowMoreLoader(true);
         setCurrentPage(currentPage + 1);
@@ -63,7 +70,11 @@ const ProductListing = () => {
                             <Link to={`/product-detail/${product._id}`}>
                                 <ProductCard
                                     id={product._id.toString()}
-                                    imageUrl={product.imageUrl}
+                                    imageUrl={
+                                        product.colorImages[
+                                            product.colors[0]
+                                        ][0]
+                                    }
                                     originalPrice={product.price}
                                     sellingPrice={product.sellingPrice}
                                     productDescription={

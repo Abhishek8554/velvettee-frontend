@@ -33,7 +33,7 @@ const useApi = (config?: IApiConfig) => {
             return value;
         },
         (err) => {
-            return Promise.reject(err.response.data);
+            return Promise.reject(err?.response?.data);
         }
     );
 

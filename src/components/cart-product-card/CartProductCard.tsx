@@ -3,10 +3,18 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import styles from './CartProductCard.module.scss';
 import Button, { ButtonTypes } from '../Button';
 import { HeartIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
+
 import { useState } from 'react';
 import { Menu, MenuItem } from '@mui/material';
 // import useCart from '../../stores/Cart';
 import useWishlist from '../../stores/Wishlist';
+import useApi from '../../hooks/useApi';
+import ApiUrls from '../../constants/ApiUrls';
+import useAuthStore from '../../stores/Auth';
+import { AxiosResponse } from 'axios';
+// import useCart from '../../stores/Cart';
+// import { Link } from 'react-router-dom';
 
 interface IProps {
     imageUrl: string;
@@ -19,13 +27,19 @@ interface IProps {
     sellingPrice: number;
     product: any;
     isWishlistScreen?: boolean;
+    selectedQty: number;
+    onCartRemove: () => void;
+    onCartUpdate?: (response: AxiosResponse) => void;
 }
 
 const CartProductCard = (props: IProps) => {
     // const cart = useCart();
     const wishlist = useWishlist();
+    // const cart = useCart();
+    const auth = useAuthStore();
+    const api = useApi({ withAuth: true });
     const [selectedSize, setSelectedSize] = useState(props.selectedSize);
-    const [selectedQty, setSelectedQty] = useState(1);
+    const [selectedQty, setSelectedQty] = useState(props.selectedQty);
     const quantitlyOptions = [...new Array(props.availableQty).keys()].map(
         (x) => x + 1
     );
@@ -43,23 +57,37 @@ const CartProductCard = (props: IProps) => {
         setQtyAnchorEl(null);
     };
     const handleSelection = (name: string, value: number) => {
+        const updates: any = {};
         if (name === 'size') {
-            setSelectedSize(value);
+            updates['size'] = value;
         }
         if (name === 'qty') {
-            setSelectedQty(value);
+            updates['quantity'] = value;
         }
+        api.put(ApiUrls.CART_UPDATE_PRODUCTS, {
+            userId: auth.user?._id,
+            productId: props?.product?._id,
+            updates: updates,
+        })
+            .then((response) => {
+                if (name === 'size') {
+                    setSelectedSize(value);
+                } else {
+                    setSelectedQty(value);
+                }
+                if (props.onCartUpdate) {
+                    props.onCartUpdate(response);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
     return (
+        // <Link to={`/product-detail/${props.product._id}`}>
         <div className={styles.wrapper}>
             <div className={styles.left}>
-                <img
-                    src={
-                        props?.imageUrl
-                            ? props.imageUrl
-                            : '/public/product.jpeg'
-                    }
-                />
+                <img src={props?.imageUrl} />
             </div>
             <div className={styles.right}>
                 <div className={styles.name}>{props.name}</div>
@@ -160,23 +188,46 @@ const CartProductCard = (props: IProps) => {
                             if (props.isWishlistScreen) {
                                 wishlist.remove(props.product._id);
                             } else {
-                                // Handle Cart here
+                                console.log(props.product._id);
+                                props.onCartRemove();
                             }
                         }}
                     />
                     {!props.isWishlistScreen && (
                         <Button
-                            text="Move to Wishlist"
+                            text={
+                                wishlist.wishlist.find(
+                                    (x) => x._id === props.product._id
+                                )
+                                    ? 'Remove from Wishlist'
+                                    : 'Add to Wishlist'
+                            }
                             type={ButtonTypes.TEXT}
-                            PrefixIcon={HeartIcon}
+                            PrefixIcon={
+                                wishlist.wishlist.find(
+                                    (x) => x._id === props.product._id
+                                )
+                                    ? HeartSolid
+                                    : HeartIcon
+                            }
                             onClick={() => {
-                                wishlist.add(props.product);
+                                if (
+                                    wishlist.wishlist.find(
+                                        (x) => x._id === props.product._id
+                                    )
+                                ) {
+                                    wishlist.remove(props.product._id);
+                                } else {
+                                    wishlist.add(props.product);
+                                }
                             }}
                         />
                     )}
                 </div>
             </div>
         </div>
+
+        // </Link>
     );
 };
 

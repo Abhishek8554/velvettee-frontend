@@ -1,10 +1,14 @@
+import { useNavigate } from 'react-router-dom';
 import CartProductCard from '../../components/cart-product-card/CartProductCard';
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
 import useWishlist from '../../stores/Wishlist';
 import styles from './Wishlist.module.scss';
+import Button from '../../components/Button';
 const Wishlist = () => {
     const wishlist = useWishlist();
+    console.log(wishlist.wishlist);
+    const navigate = useNavigate();
     return (
         <>
             <Header />
@@ -12,7 +16,13 @@ const Wishlist = () => {
                 <div className={styles.wrapper}>
                     {wishlist.wishlist.map((product) => (
                         <CartProductCard
-                            imageUrl={product.imageUrl}
+                            imageUrl={
+                                product?.colorImages[product?.colors[0]]
+                                    ? product?.colorImages[
+                                          product?.colors[0]
+                                      ][0]
+                                    : ''
+                            }
                             name={product.name}
                             availableSizes={product.size}
                             description={product.productShortDesc}
@@ -23,6 +33,8 @@ const Wishlist = () => {
                             availableQty={product.availableQuantity}
                             key={product._id}
                             isWishlistScreen={true}
+                            selectedQty={1}
+                            onCartRemove={() => {}}
                         />
                     ))}
                 </div>
@@ -31,6 +43,11 @@ const Wishlist = () => {
                     <h1 className={styles.msg}>
                         Oops!!! You dont have any wishlist items
                     </h1>
+                    <Button
+                        className={styles.back}
+                        onClick={() => navigate('/')}
+                        text="Back To Home"
+                    />
                 </div>
             )}
 

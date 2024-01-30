@@ -4,12 +4,24 @@ import useWishlist from './Wishlist';
 import useApi from '../hooks/useApi';
 import useUserService from './UserService';
 
+export interface IUserAddress {
+    address: string;
+    phone: number;
+    pincode: number;
+    town: string;
+    city: string;
+    name: string;
+    state: string;
+    isHome: boolean;
+    isWork: boolean;
+    isDefault: boolean;
+}
 export interface IUserData {
     _id: string;
     first_name: string;
     last_name: string;
     email: string;
-    address?: string;
+    address?: IUserAddress[];
     phone?: number;
     googleId?: string;
     profileImage?: string;
