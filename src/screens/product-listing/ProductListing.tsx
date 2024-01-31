@@ -45,12 +45,12 @@ const ProductListing = () => {
         fetchProducts();
     }, [currentPage]);
 
-    useEffect(() => {
-        setCurrentPage(1);
-        setInitialDataLoad(true);
-        setProducts([]);
-        fetchProducts();
-    }, [params.search]);
+    // useEffect(() => {
+    //     setCurrentPage(1);
+    //     setInitialDataLoad(true);
+    //     setProducts([]);
+    //     fetchProducts();
+    // }, [params.search]);
     const handleShowMore = () => {
         setShowMoreLoader(true);
         setCurrentPage(currentPage + 1);
