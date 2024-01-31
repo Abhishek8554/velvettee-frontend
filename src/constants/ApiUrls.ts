@@ -17,4 +17,6 @@ export default class ApiUrls {
     static CART_UPDATE_PRODUCTS = '/cart/updateCartItem';
     static DELETE_ADDRESS = '/users/{userId}/addresses/{addressId}';
     static UPDATE_ADDRESS = '/users/{userId}/updateaddresses';
+    static ADD_CARD = '/users/{userId}/cards';
+    static PLACEORDER = '/order/addOrder';
 }

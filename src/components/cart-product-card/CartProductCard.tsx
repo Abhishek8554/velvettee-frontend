@@ -2,19 +2,23 @@
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import styles from './CartProductCard.module.scss';
 import Button, { ButtonTypes } from '../Button';
-import { HeartIcon, TrashIcon } from '@heroicons/react/24/outline';
+import {
+    HeartIcon,
+    ShoppingCartIcon,
+    TrashIcon,
+} from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
 
 import { useState } from 'react';
 import { Menu, MenuItem } from '@mui/material';
-// import useCart from '../../stores/Cart';
+import useCart from '../../stores/Cart';
 import useWishlist from '../../stores/Wishlist';
 import useApi from '../../hooks/useApi';
 import ApiUrls from '../../constants/ApiUrls';
 import useAuthStore from '../../stores/Auth';
 import { AxiosResponse } from 'axios';
 // import useCart from '../../stores/Cart';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 interface IProps {
     imageUrl: string;
@@ -35,7 +39,7 @@ interface IProps {
 const CartProductCard = (props: IProps) => {
     // const cart = useCart();
     const wishlist = useWishlist();
-    // const cart = useCart();
+    const cart = useCart();
     const auth = useAuthStore();
     const api = useApi({ withAuth: true });
     const [selectedSize, setSelectedSize] = useState(props.selectedSize);
@@ -48,11 +52,15 @@ const CartProductCard = (props: IProps) => {
     const openSize = Boolean(sizeAnchorEl);
     const openQty = Boolean(qtyAnchorEl);
     const handleClick = (event: any) => {
+        event.stopPropagation();
+        event.preventDefault();
         if (event.target.id === 'size-btn')
             setSizeAnchorEl(event.currentTarget);
         if (event.target.id === 'qty-btn') setQtyAnchorEl(event.currentTarget);
     };
-    const handleClose = () => {
+    const handleClose = (event: any) => {
+        event.stopPropagation();
+        event.preventDefault();
         setSizeAnchorEl(null);
         setQtyAnchorEl(null);
     };
@@ -84,150 +92,187 @@ const CartProductCard = (props: IProps) => {
             });
     };
     return (
-        // <Link to={`/product-detail/${props.product._id}`}>
-        <div className={styles.wrapper}>
-            <div className={styles.left}>
-                <img src={props?.imageUrl} />
-            </div>
-            <div className={styles.right}>
-                <div className={styles.name}>{props.name}</div>
-                <div className={styles.description}>{props.description}</div>
-                {!props.isWishlistScreen && (
-                    <div className={styles.dropdown_container}>
-                        <div
-                            className={styles.dropdown}
-                            id="size-btn"
-                            aria-controls={openSize ? 'size-menu' : undefined}
-                            aria-haspopup="true"
-                            aria-expanded={openSize ? 'true' : undefined}
-                            onClick={handleClick}
-                        >
-                            Size: {selectedSize}
-                            <div className={styles.dropdown_icon}>
-                                <ChevronDownIcon />
-                            </div>
-                        </div>
-                        <Menu
-                            id="size-menu"
-                            anchorEl={sizeAnchorEl}
-                            open={openSize}
-                            onClose={handleClose}
-                            MenuListProps={{
-                                'aria-labelledby': 'basic-button',
-                            }}
-                        >
-                            {props.availableSizes.map((size) => (
-                                <MenuItem
-                                    onClick={() => {
-                                        handleClose();
-                                        handleSelection('size', size);
-                                    }}
-                                >
-                                    {size}
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                        <div
-                            className={styles.dropdown}
-                            id="qty-btn"
-                            aria-controls={openQty ? 'qty-menu' : undefined}
-                            aria-haspopup="true"
-                            aria-expanded={openQty ? 'true' : undefined}
-                            onClick={handleClick}
-                        >
-                            Qty: {selectedQty}
-                            <div className={styles.dropdown_icon}>
-                                <ChevronDownIcon />
+        <Link to={`/product-detail/${props.product._id}`}>
+            <div className={styles.wrapper}>
+                <div className={styles.left}>
+                    <img src={props?.imageUrl} />
+                </div>
+                <div className={styles.right}>
+                    <div className={styles.name}>{props.name}</div>
+                    <div className={styles.description}>
+                        {props.description}
+                    </div>
+                    {!props.isWishlistScreen && (
+                        <div className={styles.dropdown_container}>
+                            <div
+                                className={styles.dropdown}
+                                id="size-btn"
+                                aria-controls={
+                                    openSize ? 'size-menu' : undefined
+                                }
+                                aria-haspopup="true"
+                                aria-expanded={openSize ? 'true' : undefined}
+                                onClick={handleClick}
+                            >
+                                Size: {selectedSize}
+                                <div className={styles.dropdown_icon}>
+                                    <ChevronDownIcon />
+                                </div>
                             </div>
                             <Menu
-                                id="qty-menu"
-                                anchorEl={qtyAnchorEl}
-                                open={openQty}
+                                id="size-menu"
+                                anchorEl={sizeAnchorEl}
+                                open={openSize}
                                 onClose={handleClose}
                                 MenuListProps={{
                                     'aria-labelledby': 'basic-button',
                                 }}
                             >
-                                {quantitlyOptions.map((qty) => (
+                                {props.availableSizes.map((size) => (
                                     <MenuItem
-                                        onClick={() => {
-                                            handleClose();
-                                            handleSelection('qty', qty);
+                                        onClick={(event: any) => {
+                                            event.stopPropagation();
+                                            event.preventDefault();
+                                            handleClose(event);
+                                            handleSelection('size', size);
                                         }}
                                     >
-                                        {qty}
+                                        {size}
                                     </MenuItem>
                                 ))}
                             </Menu>
+                            <div
+                                className={styles.dropdown}
+                                id="qty-btn"
+                                aria-controls={openQty ? 'qty-menu' : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={openQty ? 'true' : undefined}
+                                onClick={handleClick}
+                            >
+                                Qty: {selectedQty}
+                                <div className={styles.dropdown_icon}>
+                                    <ChevronDownIcon />
+                                </div>
+                                <Menu
+                                    id="qty-menu"
+                                    anchorEl={qtyAnchorEl}
+                                    open={openQty}
+                                    onClose={handleClose}
+                                    MenuListProps={{
+                                        'aria-labelledby': 'basic-button',
+                                    }}
+                                >
+                                    {quantitlyOptions.map((qty) => (
+                                        <MenuItem
+                                            onClick={(event: any) => {
+                                                event.stopPropagation();
+                                                event.preventDefault();
+                                                handleClose(event);
+                                                handleSelection('qty', qty);
+                                            }}
+                                        >
+                                            {qty}
+                                        </MenuItem>
+                                    ))}
+                                </Menu>
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
 
-                <div className={styles.price_container}>
-                    <span className={styles.currency}>₹</span>
-                    <span className={styles.amount}>{props.sellingPrice}</span>
-                    <span className={styles.original_price}>
-                        ₹{props.originalPrice}
-                    </span>
-                    <span className={styles.discount}>
-                        (
-                        {(
-                            ((props.originalPrice - props.sellingPrice) /
-                                props.originalPrice) *
-                            100
-                        ).toFixed(2)}
-                        % off)
-                    </span>
-                </div>
-                <div className={styles.buttons_container}>
-                    <Button
-                        text="Remove"
-                        type={ButtonTypes.TEXT}
-                        PrefixIcon={TrashIcon}
-                        onClick={() => {
-                            if (props.isWishlistScreen) {
-                                wishlist.remove(props.product._id);
-                            } else {
-                                console.log(props.product._id);
-                                props.onCartRemove();
-                            }
-                        }}
-                    />
-                    {!props.isWishlistScreen && (
+                    <div className={styles.price_container}>
+                        <span className={styles.currency}>₹</span>
+                        <span className={styles.amount}>
+                            {props.sellingPrice}
+                        </span>
+                        <span className={styles.original_price}>
+                            ₹{props.originalPrice}
+                        </span>
+                        <span className={styles.discount}>
+                            (
+                            {(
+                                ((props.originalPrice - props.sellingPrice) /
+                                    props.originalPrice) *
+                                100
+                            ).toFixed(2)}
+                            % off)
+                        </span>
+                    </div>
+                    <div className={styles.buttons_container}>
                         <Button
-                            text={
-                                wishlist.wishlist.find(
-                                    (x) => x._id === props.product._id
-                                )
-                                    ? 'Remove from Wishlist'
-                                    : 'Add to Wishlist'
-                            }
+                            text="Remove"
                             type={ButtonTypes.TEXT}
-                            PrefixIcon={
-                                wishlist.wishlist.find(
-                                    (x) => x._id === props.product._id
-                                )
-                                    ? HeartSolid
-                                    : HeartIcon
-                            }
+                            PrefixIcon={TrashIcon}
                             onClick={() => {
-                                if (
-                                    wishlist.wishlist.find(
-                                        (x) => x._id === props.product._id
-                                    )
-                                ) {
+                                if (props.isWishlistScreen) {
                                     wishlist.remove(props.product._id);
                                 } else {
-                                    wishlist.add(props.product);
+                                    console.log(props.product._id);
+                                    props.onCartRemove();
                                 }
                             }}
                         />
-                    )}
+                        <Button
+                            text={
+                                !props.isWishlistScreen
+                                    ? wishlist.wishlist.find(
+                                          (x) => x._id === props.product._id
+                                      )
+                                        ? 'Remove from Wishlist'
+                                        : 'Add to Wishlist'
+                                    : cart.cart.find(
+                                          (x: any) =>
+                                              x.product._id ===
+                                              props.product._id
+                                      )
+                                    ? 'Remove from Cart'
+                                    : 'Add to Cart'
+                            }
+                            type={ButtonTypes.TEXT}
+                            PrefixIcon={
+                                !props.isWishlistScreen
+                                    ? wishlist.wishlist.find(
+                                          (x) => x._id === props.product._id
+                                      )
+                                        ? HeartSolid
+                                        : HeartIcon
+                                    : ShoppingCartIcon
+                            }
+                            onClick={() => {
+                                if (!props.isWishlistScreen) {
+                                    if (
+                                        wishlist.wishlist.find(
+                                            (x) => x._id === props.product._id
+                                        )
+                                    ) {
+                                        wishlist.remove(props.product._id);
+                                    } else {
+                                        wishlist.add(props.product);
+                                    }
+                                } else {
+                                    console.log(props.product);
+                                    if (
+                                        cart.cart.find(
+                                            (x) =>
+                                                x.product._id ===
+                                                props.product._id
+                                        )
+                                    ) {
+                                        cart.remove(props.product._id);
+                                    } else {
+                                        cart.add(
+                                            props.product,
+                                            props.product.size[0],
+                                            props.product.colors[0],
+                                            1
+                                        );
+                                    }
+                                }
+                            }}
+                        />
+                    </div>
                 </div>
             </div>
-        </div>
-
-        // </Link>
+        </Link>
     );
 };
 

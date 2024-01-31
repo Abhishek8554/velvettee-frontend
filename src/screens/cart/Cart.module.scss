@@ -200,6 +200,9 @@ input[type='radio'] {
     border: 1px solid #696871;
     padding: 15px;
     border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
 .card_fields_wrapper {

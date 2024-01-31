@@ -53,6 +53,15 @@ interface IUser {
         successCallBack: (response: AxiosResponse) => void,
         errorCallback: (err: any) => void
     ) => void;
+    saveCard: (
+        cardDetails: any,
+        successCallBack: (response: AxiosResponse) => void,
+        errorCallback: (err: any) => void
+    ) => void;
+    placeOrderFromCart: (
+        successCallback: (response: AxiosResponse) => void,
+        errorCallback: (err: any) => void
+    ) => void;
     logout: () => void;
 }
 
@@ -182,6 +191,35 @@ const useUserService = create<IUser>()((set) => {
                 ),
                 { addresses: [formattedAddress] }
             )
+                .then(successCallback)
+                .catch(errorCallback);
+        },
+        // TODO: Integrate razor pay here
+        saveCard(cardDetails, successCallBack, errorCallback) {
+            const authRef = useAuthStore.getState();
+            console.log(cardDetails);
+            const formattedCardData = {
+                cardNumber: cardDetails.cardNumber,
+                name: cardDetails.name,
+                expiryMonth: cardDetails.month,
+                expiryYear: cardDetails.year,
+                cvv: cardDetails.cvv,
+            };
+            api.post(
+                ApiUrls.ADD_CARD.replace(
+                    '{userId}',
+                    authRef.user?._id as string
+                ),
+                formattedCardData
+            )
+                .then(successCallBack)
+                .catch(errorCallback);
+        },
+        placeOrderFromCart(successCallback, errorCallback) {
+            const authRef = useAuthStore.getState();
+            api.post(ApiUrls.PLACEORDER, {
+                userId: authRef.user?._id as string,
+            })
                 .then(successCallback)
                 .catch(errorCallback);
         },

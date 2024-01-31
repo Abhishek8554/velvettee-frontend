@@ -91,12 +91,54 @@ const AddressCard = (props: {
     );
 };
 
+const DebitCardComponent = (props: {
+    id: string;
+    name: string;
+    cardNumber: string;
+    expiryDate: string;
+    onRemove: (id: string) => void;
+    onEdit: () => void;
+}) => {
+    return (
+        <div className={styles.address_card_wrapper}>
+            <div className={styles.name}>{props.name}</div>
+            <div className={styles.address}>
+                <span className={styles.add}>Card Number</span> -
+                <span className={styles.locality}>{props.cardNumber}</span>
+            </div>
+            <div className={styles.mobile}>
+                <div>Expiry Date - </div>
+                <div className={styles.mobile_num}>{props.expiryDate}</div>
+            </div>
+            <div className={styles.btn_container}>
+                <Button
+                    text="Remove"
+                    className={styles.address_card_btn}
+                    type={ButtonTypes.OUTLINE}
+                    onClick={() => {
+                        props.onRemove(props.id);
+                    }}
+                />
+                <Button
+                    text="Edit"
+                    className={styles.address_card_btn}
+                    type={ButtonTypes.OUTLINE}
+                    onClick={() => {
+                        props.onEdit();
+                    }}
+                />
+            </div>
+        </div>
+    );
+};
+
 const PricingDetails = (props: {
     cartTotal: number;
     gst: number;
     shippingCharges: number;
     totalAmount: number;
     buttonText: string;
+    disableBtn?: boolean;
     onClick: () => void;
 }) => {
     return (
@@ -125,6 +167,7 @@ const PricingDetails = (props: {
                 </div>
                 {props.buttonText && (
                     <Button
+                        disabled={!!props.disableBtn}
                         text={props.buttonText}
                         className={styles.cta}
                         onClick={() => {
@@ -148,8 +191,8 @@ const Cart = () => {
     const cvvRegExp = /^[0-9]{3,4}$/;
     const [currentSteps, setCurrentSteps] = useState(CartSteps.CART);
     const [cartDetails, setCartDetails] = useState<any>(undefined);
-    const [addresses, setAddresses] = useState<any>(undefined);
     const [products, setProducts] = useState<any>(undefined);
+    const [addresses, setAddresses] = useState<any>(undefined);
     const [addNewAddress, setAddNewAddress] = useState(false);
     const [selectedAddress, setSelectedAddress] = useState(undefined);
     const [currentlyEditingAddress, setCurrentlyEditingAddress] =
@@ -196,7 +239,9 @@ const Cart = () => {
             .matches(cardNumberRegExp, 'Enter a valid card number')
             .required('Card Number is Required'),
         name: Yup.string().required('Name is Required'),
-        month: Yup.string().required('Month is Required'),
+        month: Yup.string()
+            .required('Month is Required')
+            .matches(/^(0?[1-9]|1[012])$/, 'Enter a valid Month'),
         year: Yup.string().required('Year is Required'),
         cvv: Yup.string()
             .matches(cvvRegExp, 'Invalid CVV')
@@ -266,8 +311,29 @@ const Cart = () => {
         setAddNewAddress(true);
     };
     const handlePaymentFormSubmit = (a: any) => {
-        console.log(123);
-        console.log(a);
+        // TODO: handle payment gateway save card here
+        userService.placeOrderFromCart(
+            (response) => {
+                console.log(response);
+                snackBarService.open(response.data.message);
+                getCartDetails();
+            },
+            (err) => {
+                snackBarService.open(err.message, SnackBarTypes.DANGER);
+            }
+        );
+        // console.log(a);
+        // if (a.saveSecurly) {
+        //     userService.saveCard(
+        //         a,
+        //         (response) => {
+        //             console.log(response);
+        //         },
+        //         (err) => {
+        //             console.log(err);
+        //         }
+        //     );
+        // }
     };
 
     const getCartDetails = () => {
@@ -297,7 +363,19 @@ const Cart = () => {
         userService.fetchAddresses(
             auth.user?._id as string,
             (response) => {
+                if (response.data.addresses && response.data.addresses.length) {
+                    setAddNewAddress(false);
+                } else {
+                    setAddNewAddress(true);
+                }
                 setAddresses(response.data.addresses);
+                const defaultAddress = response.data?.addresses?.find(
+                    (x: any) => x?.IsDefault
+                );
+
+                if (defaultAddress) {
+                    setSelectedAddress(defaultAddress);
+                }
                 loaderService.hideFullPageLoader();
             },
             (err) => {
@@ -356,7 +434,9 @@ const Cart = () => {
                         <div
                             className={styles.stepper_item}
                             onClick={() => {
-                                setCurrentSteps(CartSteps.PAYMENT);
+                                if (selectedAddress) {
+                                    setCurrentSteps(CartSteps.PAYMENT);
+                                }
                             }}
                         >
                             <div
@@ -624,6 +704,14 @@ const Cart = () => {
                                                                   userService.removeAddress(
                                                                       id,
                                                                       () => {
+                                                                          if (
+                                                                              selectedAddress?._id ===
+                                                                              id
+                                                                          ) {
+                                                                              setSelectedAddress(
+                                                                                  undefined
+                                                                              );
+                                                                          }
                                                                           getAddresses();
                                                                       },
                                                                       (err) => {
@@ -860,14 +948,14 @@ const Cart = () => {
                                             )}
                                         </Formik>
                                     )}
-                                    {!addNewAddress ||
-                                        (addresses && addresses.length && (
-                                            <Button
-                                                text={'Add Address'}
-                                                type={ButtonTypes.OUTLINE}
-                                                onClick={onAddNewAddress}
-                                            />
-                                        ))}
+
+                                    {!addNewAddress && (
+                                        <Button
+                                            text={'Add Address'}
+                                            type={ButtonTypes.OUTLINE}
+                                            onClick={onAddNewAddress}
+                                        />
+                                    )}
                                 </div>
                                 <div className={styles.right}>
                                     <PricingDetails
@@ -886,6 +974,7 @@ const Cart = () => {
                                         totalAmount={
                                             cartDetails?.pricingDetails?.total
                                         }
+                                        disableBtn={!selectedAddress}
                                         buttonText="Proceed to Payment"
                                     />
                                 </div>
@@ -904,6 +993,14 @@ const Cart = () => {
                                             Credit/Debit Card
                                         </p>
                                         <div className={styles.add_card_form}>
+                                            {/* <DebitCardComponent
+                                                id="1"
+                                                cardNumber="123"
+                                                expiryDate="23/11/200"
+                                                name="Harsh"
+                                                onEdit={() => {}}
+                                                onRemove={() => {}}
+                                            /> */}
                                             <Formik
                                                 initialValues={
                                                     paymentFormInitialValues
@@ -1049,7 +1146,7 @@ const Cart = () => {
                                                             card Securly
                                                         </label>
                                                         <Button
-                                                            text="Pay 123"
+                                                            text={`Pay ${cartDetails?.pricingDetails?.total}`}
                                                             className={
                                                                 styles.cta
                                                             }
@@ -1075,7 +1172,7 @@ const Cart = () => {
                                         totalAmount={
                                             cartDetails?.pricingDetails?.total
                                         }
-                                        buttonText=""
+                                        buttonText={``}
                                     />
                                 </div>
                             </div>

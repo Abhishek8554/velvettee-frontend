@@ -31,9 +31,9 @@ function App() {
                 >
                     <Snackbar />
                     <FullPageLoader />
+                    <RouterProvider router={router} />
                 </div>
             </ThemeProvider>
-            <RouterProvider router={router} />
         </>
     );
 }

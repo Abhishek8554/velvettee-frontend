@@ -13,6 +13,7 @@ type ButtonProps = {
     className?: string;
     PrefixIcon?: any;
     prefixImgePath?: string;
+    disabled?: boolean;
     onClick?: () => void;
 };
 
@@ -23,6 +24,7 @@ const Button: React.FC<ButtonProps> = ({
     className,
     PrefixIcon,
     prefixImgePath,
+    disabled,
     onClick,
 }) => {
     if (!type) {
@@ -30,12 +32,16 @@ const Button: React.FC<ButtonProps> = ({
             <button
                 onClick={(e: any) => {
                     e.stopPropagation();
+                    e.preventDefault();
                     if (onClick) {
                         onClick();
                     }
                 }}
+                disabled={disabled}
                 type="submit"
-                className={`bg-blue-500 text-white p-2 rounded-md w-full sm:w-auto default-button flex items-center justify-center ${className}`}
+                className={`bg-blue-500 text-white p-2 rounded-md w-full sm:w-auto default-button flex items-center justify-center ${className} ${
+                    disabled ? 'disabled-btn' : ''
+                }`}
             >
                 {PrefixIcon && (
                     <span className="h-5 button-icon-container mr-1 flex">
@@ -58,12 +64,17 @@ const Button: React.FC<ButtonProps> = ({
             <button
                 onClick={(e: any) => {
                     e.stopPropagation();
+                    e.preventDefault();
+
                     if (onClick) {
                         onClick();
                     }
                 }}
                 type="submit"
-                className={`border-2 font-medium border-current p-2 rounded-md w-full sm:w-auto outline-button flex items-center justify-center color-primary ${className}`}
+                disabled={disabled}
+                className={`border-2 font-medium border-current p-2 rounded-md w-full sm:w-auto outline-button flex items-center justify-center color-primary ${className} ${
+                    disabled ? 'disabled-btn' : ''
+                }`}
             >
                 {PrefixIcon && (
                     <span className="h-5 button-icon-container mr-1 flex">
@@ -86,12 +97,17 @@ const Button: React.FC<ButtonProps> = ({
             <button
                 onClick={(e: any) => {
                     e.stopPropagation();
+                    e.preventDefault();
+
                     if (onClick) {
                         onClick();
                     }
                 }}
                 type="submit"
-                className={` font-medium border-current p-2 rounded-md w-full sm:w-auto outline-button flex items-center justify-center color-primary ${className}`}
+                disabled={disabled}
+                className={` font-medium border-current p-2 rounded-md w-full sm:w-auto outline-button flex items-center justify-center color-primary ${className} ${
+                    disabled ? 'disabled-btn' : ''
+                }`}
             >
                 {PrefixIcon && (
                     <span className="h-5 button-icon-container mr-1 flex">
