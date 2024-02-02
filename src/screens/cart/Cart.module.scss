@@ -271,3 +271,13 @@ input[type='radio'] {
 .selected_address {
     border: 3px solid var(--primary-color);
 }
+/* Change the white to any color */
+.cart_form {
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 30px #eae9f2 inset !important;
+        /* font-size: 40px; */
+    }
+}

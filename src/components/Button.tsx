@@ -14,6 +14,8 @@ type ButtonProps = {
     PrefixIcon?: any;
     prefixImgePath?: string;
     disabled?: boolean;
+    preventDefault?: boolean;
+    stopPropogation?: boolean;
     onClick?: () => void;
 };
 
@@ -24,6 +26,8 @@ const Button: React.FC<ButtonProps> = ({
     className,
     PrefixIcon,
     prefixImgePath,
+    stopPropogation,
+    preventDefault,
     disabled,
     onClick,
 }) => {
@@ -31,8 +35,12 @@ const Button: React.FC<ButtonProps> = ({
         return (
             <button
                 onClick={(e: any) => {
-                    e.stopPropagation();
-                    e.preventDefault();
+                    if (stopPropogation) {
+                        e.stopPropagation();
+                    }
+                    if (preventDefault) {
+                        e.preventDefault();
+                    }
                     if (onClick) {
                         onClick();
                     }
@@ -63,9 +71,12 @@ const Button: React.FC<ButtonProps> = ({
         return (
             <button
                 onClick={(e: any) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-
+                    if (stopPropogation) {
+                        e.stopPropagation();
+                    }
+                    if (preventDefault) {
+                        e.preventDefault();
+                    }
                     if (onClick) {
                         onClick();
                     }
@@ -96,9 +107,12 @@ const Button: React.FC<ButtonProps> = ({
         return (
             <button
                 onClick={(e: any) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-
+                    if (stopPropogation) {
+                        e.stopPropagation();
+                    }
+                    if (preventDefault) {
+                        e.preventDefault();
+                    }
                     if (onClick) {
                         onClick();
                     }

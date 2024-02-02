@@ -41,7 +41,7 @@ const Wishlist = () => {
             ) : (
                 <div className={styles.error}>
                     <h1 className={styles.msg}>
-                        Oops!!! You dont have any wishlist items
+                        Oops!!! You dont have any wishlisted items
                     </h1>
                     <Button
                         className={styles.back}

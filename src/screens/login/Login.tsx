@@ -43,6 +43,7 @@ export default function Login() {
             values.password,
             () => {
                 loaderService.hideFullPageLoader();
+                snackBarService.open('Login Successfull');
                 navigate('/');
             },
             (error) => {

@@ -202,6 +202,8 @@ const CartProductCard = (props: IProps) => {
                             text="Remove"
                             type={ButtonTypes.TEXT}
                             PrefixIcon={TrashIcon}
+                            stopPropogation
+                            preventDefault
                             onClick={() => {
                                 if (props.isWishlistScreen) {
                                     wishlist.remove(props.product._id);
@@ -212,6 +214,8 @@ const CartProductCard = (props: IProps) => {
                             }}
                         />
                         <Button
+                            stopPropogation
+                            preventDefault
                             text={
                                 !props.isWishlistScreen
                                     ? wishlist.wishlist.find(
@@ -265,6 +269,7 @@ const CartProductCard = (props: IProps) => {
                                             props.product.colors[0],
                                             1
                                         );
+                                        wishlist.remove(props.product._id);
                                     }
                                 }
                             }}

@@ -72,6 +72,8 @@ const AddressCard = (props: {
             <div className={styles.btn_container}>
                 <Button
                     text="Remove"
+                    stopPropogation
+                    preventDefault
                     className={styles.address_card_btn}
                     type={ButtonTypes.OUTLINE}
                     onClick={() => {
@@ -80,6 +82,8 @@ const AddressCard = (props: {
                 />
                 <Button
                     text="Edit"
+                    stopPropogation
+                    preventDefault
                     className={styles.address_card_btn}
                     type={ButtonTypes.OUTLINE}
                     onClick={() => {
@@ -91,46 +95,46 @@ const AddressCard = (props: {
     );
 };
 
-const DebitCardComponent = (props: {
-    id: string;
-    name: string;
-    cardNumber: string;
-    expiryDate: string;
-    onRemove: (id: string) => void;
-    onEdit: () => void;
-}) => {
-    return (
-        <div className={styles.address_card_wrapper}>
-            <div className={styles.name}>{props.name}</div>
-            <div className={styles.address}>
-                <span className={styles.add}>Card Number</span> -
-                <span className={styles.locality}>{props.cardNumber}</span>
-            </div>
-            <div className={styles.mobile}>
-                <div>Expiry Date - </div>
-                <div className={styles.mobile_num}>{props.expiryDate}</div>
-            </div>
-            <div className={styles.btn_container}>
-                <Button
-                    text="Remove"
-                    className={styles.address_card_btn}
-                    type={ButtonTypes.OUTLINE}
-                    onClick={() => {
-                        props.onRemove(props.id);
-                    }}
-                />
-                <Button
-                    text="Edit"
-                    className={styles.address_card_btn}
-                    type={ButtonTypes.OUTLINE}
-                    onClick={() => {
-                        props.onEdit();
-                    }}
-                />
-            </div>
-        </div>
-    );
-};
+// const DebitCardComponent = (props: {
+//     id: string;
+//     name: string;
+//     cardNumber: string;
+//     expiryDate: string;
+//     onRemove: (id: string) => void;
+//     onEdit: () => void;
+// }) => {
+//     return (
+//         <div className={styles.address_card_wrapper}>
+//             <div className={styles.name}>{props.name}</div>
+//             <div className={styles.address}>
+//                 <span className={styles.add}>Card Number</span> -
+//                 <span className={styles.locality}>{props.cardNumber}</span>
+//             </div>
+//             <div className={styles.mobile}>
+//                 <div>Expiry Date - </div>
+//                 <div className={styles.mobile_num}>{props.expiryDate}</div>
+//             </div>
+//             <div className={styles.btn_container}>
+//                 <Button
+//                     text="Remove"
+//                     className={styles.address_card_btn}
+//                     type={ButtonTypes.OUTLINE}
+//                     onClick={() => {
+//                         props.onRemove(props.id);
+//                     }}
+//                 />
+//                 <Button
+//                     text="Edit"
+//                     className={styles.address_card_btn}
+//                     type={ButtonTypes.OUTLINE}
+//                     onClick={() => {
+//                         props.onEdit();
+//                     }}
+//                 />
+//             </div>
+//         </div>
+//     );
+// };
 
 const PricingDetails = (props: {
     cartTotal: number;
@@ -217,6 +221,7 @@ const Cart = () => {
                 /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
                 'Mobile Number is not valid'
             )
+            .max(10, 'Invalid Mobile Number')
             .required('Mobile Number is Required'),
         pinCode: Yup.string()
             .matches(/^[1-9][0-9]{5}$/, 'Enter a valid pincode')
@@ -310,7 +315,7 @@ const Cart = () => {
         });
         setAddNewAddress(true);
     };
-    const handlePaymentFormSubmit = (a: any) => {
+    const handlePaymentFormSubmit = () => {
         // TODO: handle payment gateway save card here
         userService.placeOrderFromCart(
             (response) => {
@@ -737,7 +742,9 @@ const Cart = () => {
                                             onSubmit={handleSubmit}
                                         >
                                             {({ errors }) => (
-                                                <Form>
+                                                <Form
+                                                    className={styles.cart_form}
+                                                >
                                                     <div
                                                         className={
                                                             styles.form_heading
@@ -1013,7 +1020,11 @@ const Cart = () => {
                                                 }
                                             >
                                                 {({ errors }) => (
-                                                    <Form>
+                                                    <Form
+                                                        className={
+                                                            styles.cart_form
+                                                        }
+                                                    >
                                                         <p
                                                             className={
                                                                 styles.card_form_headings

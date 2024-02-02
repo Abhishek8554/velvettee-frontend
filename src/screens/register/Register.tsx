@@ -50,6 +50,7 @@ export default function Register() {
             values.password,
             () => {
                 loaderService.hideFullPageLoader();
+                snackBarService.open('Register Successfull');
                 navigate('/');
             },
             (err) => {
