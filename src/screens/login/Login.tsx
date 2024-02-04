@@ -74,10 +74,10 @@ export default function Login() {
             className={`flex items-center justify-center h-screen ${styles.wrapper}`}
         >
             <div className={styles.boy_character_wrapper}>
-                <img src="/public/login-assets/Boy_Character.svg" />
+                <img src="login-assets/Boy_Character.svg" />
             </div>
             <div className={styles.girl_character_wrapper}>
-                <img src="/public/login-assets/Girl_Character.svg" />
+                <img src="login-assets/Girl_Character.svg" />
             </div>
             <Card heading="Login" subHeading="">
                 <Formik
@@ -230,7 +230,7 @@ export default function Login() {
                     onClick={loginWithGoogle}
                     type={ButtonTypes.OUTLINE}
                     className={styles.google_btn}
-                    prefixImgePath="/public/login-assets/google.svg"
+                    prefixImgePath="login-assets/google.svg"
                     text="Google"
                 />
             </Card>

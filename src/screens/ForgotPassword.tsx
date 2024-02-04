@@ -171,10 +171,10 @@ export default function ForgotPassword() {
             className={`flex items-center justify-center h-screen ${styles.wrapper}`}
         >
             <div className={styles.boy_character_wrapper}>
-                <img src="/public/login-assets/Boy_Character.svg" />
+                <img src="login-assets/Boy_Character.svg" />
             </div>
             <div className={styles.girl_character_wrapper}>
-                <img src="/public/login-assets/Girl_Character.svg" />
+                <img src="login-assets/Girl_Character.svg" />
             </div>
             {forgotPasswordStage === 1 && (
                 <Card

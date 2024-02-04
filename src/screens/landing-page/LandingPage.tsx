@@ -13,7 +13,7 @@ const LandingPage = () => {
     const products = [
         {
             id: 1,
-            imageUrl: '/public/product.jpeg',
+            imageUrl: 'product.jpeg',
             originalPrice: 1000,
             sellingPrice: 100,
             productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
@@ -21,7 +21,7 @@ const LandingPage = () => {
         },
         {
             id: 2,
-            imageUrl: '/public/product.jpeg',
+            imageUrl: 'product.jpeg',
             originalPrice: 1000,
             sellingPrice: 100,
             productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
@@ -29,7 +29,7 @@ const LandingPage = () => {
         },
         {
             id: 3,
-            imageUrl: '/public/product.jpeg',
+            imageUrl: 'product.jpeg',
             originalPrice: 1000,
             sellingPrice: 100,
             productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
@@ -37,7 +37,7 @@ const LandingPage = () => {
         },
         {
             id: 4,
-            imageUrl: '/public/product.jpeg',
+            imageUrl: 'product.jpeg',
             originalPrice: 1000,
             sellingPrice: 100,
             productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
@@ -45,7 +45,7 @@ const LandingPage = () => {
         },
         {
             id: 5,
-            imageUrl: '/public/product.jpeg',
+            imageUrl: 'product.jpeg',
             originalPrice: 1000,
             sellingPrice: 100,
             productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
@@ -53,7 +53,7 @@ const LandingPage = () => {
         },
         {
             id: 6,
-            imageUrl: '/public/product.jpeg',
+            imageUrl: 'product.jpeg',
             originalPrice: 1000,
             sellingPrice: 100,
             productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
@@ -61,7 +61,7 @@ const LandingPage = () => {
         },
         {
             id: 7,
-            imageUrl: '/public/product.jpeg',
+            imageUrl: 'product.jpeg',
             originalPrice: 1000,
             sellingPrice: 100,
             productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
@@ -69,7 +69,7 @@ const LandingPage = () => {
         },
         {
             id: 8,
-            imageUrl: '/public/product.jpeg',
+            imageUrl: 'product.jpeg',
             originalPrice: 1000,
             sellingPrice: 100,
             productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
@@ -77,7 +77,7 @@ const LandingPage = () => {
         },
         {
             id: 9,
-            imageUrl: '/public/product.jpeg',
+            imageUrl: 'product.jpeg',
             originalPrice: 1000,
             sellingPrice: 100,
             productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
@@ -85,7 +85,7 @@ const LandingPage = () => {
         },
         {
             id: 10,
-            imageUrl: '/public/product.jpeg',
+            imageUrl: 'product.jpeg',
             originalPrice: 1000,
             sellingPrice: 100,
             productDescription: 'Detail of product: Lorem Ipsum Lorem Ipsum',
@@ -127,16 +127,16 @@ const LandingPage = () => {
                     }}
                 >
                     <div className={styles.carousel_item}>
-                        <img src="/public/carouselImage.svg" />
+                        <img src="carouselImage.svg" />
                     </div>
                     <div className={styles.carousel_item}>
-                        <img src="/public/carouselImage.svg" />
+                        <img src="carouselImage.svg" />
                     </div>
                     <div className={styles.carousel_item}>
-                        <img src="/public/carouselImage.svg" />
+                        <img src="carouselImage.svg" />
                     </div>
                     <div className={styles.carousel_item}>
-                        <img src="/public/carouselImage.svg" />
+                        <img src="carouselImage.svg" />
                     </div>
                 </Carousel>
             </section>
@@ -169,7 +169,7 @@ const LandingPage = () => {
             </section>
 
             <section className={styles.bottom_ad}>
-                <img src="/public/MicrosoftTeams-image (1).png " alt="" />
+                <img src="MicrosoftTeams-image (1).png " alt="" />
             </section>
 
             <Footer />

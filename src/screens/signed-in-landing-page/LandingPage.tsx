@@ -44,16 +44,16 @@ const LandingPage = () => {
                     }}
                 >
                     <div className={styles.carousel_item}>
-                        <img src="/public/carouselImage.svg" />
+                        <img src="carouselImage.svg" />
                     </div>
                     <div className={styles.carousel_item}>
-                        <img src="/public/carouselImage.svg" />
+                        <img src="carouselImage.svg" />
                     </div>
                     <div className={styles.carousel_item}>
-                        <img src="/public/carouselImage.svg" />
+                        <img src="carouselImage.svg" />
                     </div>
                     <div className={styles.carousel_item}>
-                        <img src="/public/carouselImage.svg" />
+                        <img src="carouselImage.svg" />
                     </div>
                 </Carousel>
             </section>
@@ -72,7 +72,7 @@ const LandingPage = () => {
                     <Link to="/product-details">
                         <ProductCard
                             id="1"
-                            imageUrl="/public/product.jpeg"
+                            imageUrl="product.jpeg"
                             originalPrice={1000}
                             sellingPrice={100}
                             productDescription="Detail of product1: Lorem Ipsum Lorem Ipsum"
@@ -82,7 +82,7 @@ const LandingPage = () => {
                     </Link>
                     <ProductCard
                         id="1"
-                        imageUrl="/public/product.jpeg"
+                        imageUrl="product.jpeg"
                         originalPrice={1000}
                         sellingPrice={100}
                         productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
@@ -91,52 +91,7 @@ const LandingPage = () => {
                     />
                     <ProductCard
                         id="1"
-                        imageUrl="/public/product.jpeg"
-                        product={{}}
-                        originalPrice={1000}
-                        sellingPrice={100}
-                        productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
-                        productName="Shirt"
-                    />
-                    <ProductCard
-                        id="1"
-                        product={{}}
-                        imageUrl="/public/product.jpeg"
-                        originalPrice={1000}
-                        sellingPrice={100}
-                        productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
-                        productName="Shirt"
-                    />
-                    <ProductCard
-                        id="1"
-                        product={{}}
-                        imageUrl="/public/product.jpeg"
-                        originalPrice={1000}
-                        sellingPrice={100}
-                        productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
-                        productName="Shirt"
-                    />
-                    <ProductCard
-                        id="1"
-                        product={{}}
-                        imageUrl="/public/product.jpeg"
-                        originalPrice={1000}
-                        sellingPrice={100}
-                        productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
-                        productName="Shirt"
-                    />
-                    <ProductCard
-                        id="1"
-                        imageUrl="/public/product.jpeg"
-                        product={{}}
-                        originalPrice={1000}
-                        sellingPrice={100}
-                        productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
-                        productName="Shirt"
-                    />
-                    <ProductCard
-                        id="1"
-                        imageUrl="/public/product.jpeg"
+                        imageUrl="product.jpeg"
                         product={{}}
                         originalPrice={1000}
                         sellingPrice={100}
@@ -146,7 +101,7 @@ const LandingPage = () => {
                     <ProductCard
                         id="1"
                         product={{}}
-                        imageUrl="/public/product.jpeg"
+                        imageUrl="product.jpeg"
                         originalPrice={1000}
                         sellingPrice={100}
                         productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
@@ -155,7 +110,7 @@ const LandingPage = () => {
                     <ProductCard
                         id="1"
                         product={{}}
-                        imageUrl="/public/product.jpeg"
+                        imageUrl="product.jpeg"
                         originalPrice={1000}
                         sellingPrice={100}
                         productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
@@ -163,7 +118,25 @@ const LandingPage = () => {
                     />
                     <ProductCard
                         id="1"
-                        imageUrl="/public/product.jpeg"
+                        product={{}}
+                        imageUrl="product.jpeg"
+                        originalPrice={1000}
+                        sellingPrice={100}
+                        productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
+                        productName="Shirt"
+                    />
+                    <ProductCard
+                        id="1"
+                        imageUrl="product.jpeg"
+                        product={{}}
+                        originalPrice={1000}
+                        sellingPrice={100}
+                        productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
+                        productName="Shirt"
+                    />
+                    <ProductCard
+                        id="1"
+                        imageUrl="product.jpeg"
                         product={{}}
                         originalPrice={1000}
                         sellingPrice={100}
@@ -173,7 +146,34 @@ const LandingPage = () => {
                     <ProductCard
                         id="1"
                         product={{}}
-                        imageUrl="/public/product.jpeg"
+                        imageUrl="product.jpeg"
+                        originalPrice={1000}
+                        sellingPrice={100}
+                        productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
+                        productName="Shirt"
+                    />
+                    <ProductCard
+                        id="1"
+                        product={{}}
+                        imageUrl="product.jpeg"
+                        originalPrice={1000}
+                        sellingPrice={100}
+                        productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
+                        productName="Shirt"
+                    />
+                    <ProductCard
+                        id="1"
+                        imageUrl="product.jpeg"
+                        product={{}}
+                        originalPrice={1000}
+                        sellingPrice={100}
+                        productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
+                        productName="Shirt"
+                    />
+                    <ProductCard
+                        id="1"
+                        product={{}}
+                        imageUrl="product.jpeg"
                         originalPrice={1000}
                         sellingPrice={100}
                         productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
@@ -183,7 +183,7 @@ const LandingPage = () => {
             </section>
 
             <section className={styles.bottom_ad}>
-                <img src="/public/MicrosoftTeams-image (1).png " alt="" />
+                <img src="MicrosoftTeams-image (1).png " alt="" />
             </section>
 
             <Footer />
