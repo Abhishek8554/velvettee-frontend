@@ -152,7 +152,7 @@ const PricingDetails = (props: {
             <div className={styles.card_body}>
                 <div className={`${styles.cart_total} ${styles.pricing_row}`}>
                     <p>Cart Total</p>
-                    <p>₹{props.cartTotal.toFixed(2)}</p>
+                    <p>₹{props.cartTotal?.toFixed(2)}</p>
                 </div>
                 <div className={styles.seprator}></div>
                 <div className={styles.pricing_row}>
@@ -167,7 +167,7 @@ const PricingDetails = (props: {
                 <div className={styles.seprator}></div>
                 <div className={`${styles.pricing_row} ${styles.total}`}>
                     <p>Total Amount</p>
-                    <p>₹{props.totalAmount.toFixed(2)}</p>
+                    <p>₹{props.totalAmount?.toFixed(2)}</p>
                 </div>
                 {props.buttonText && (
                     <Button
@@ -319,7 +319,6 @@ const Cart = () => {
         // TODO: handle payment gateway save card here
         userService.placeOrderFromCart(
             (response) => {
-                console.log(response);
                 snackBarService.open(response.data.message);
                 getCartDetails();
             },
@@ -327,24 +326,23 @@ const Cart = () => {
                 snackBarService.open(err.message, SnackBarTypes.DANGER);
             }
         );
-        // console.log(a);
-        // if (a.saveSecurly) {
-        //     userService.saveCard(
-        //         a,
-        //         (response) => {
-        //             console.log(response);
-        //         },
-        //         (err) => {
-        //             console.log(err);
-        //         }
-        //     );
-        // }
     };
 
     const getCartDetails = () => {
         cart.getCartDetails(
             auth.user?._id as string,
             (response) => {
+                cart.initCartState(
+                    response.data.cartItems.map((item: any) => {
+                        return {
+                            product: item?.productDetails,
+                            size: item?.cartitem?.size,
+                            color: item?.cartitem?.color,
+                            qty: item?.cartitem?.quantity,
+                            id: item?._id,
+                        };
+                    })
+                );
                 setCartDetails(response.data);
                 loaderService.hideFullPageLoader();
                 cart.getSimilarItems(
@@ -398,7 +396,7 @@ const Cart = () => {
     return (
         <>
             <Header />
-            {cartDetails?.cartItems?.length ? (
+            {cart?.cart?.length ? (
                 <div className={styles.wrapper}>
                     <div className={styles.stepper_wrapper}>
                         <div
@@ -461,69 +459,51 @@ const Cart = () => {
                         <div className={styles.steps_container}>
                             <div className={`${styles.step} ${styles.step_1}`}>
                                 <div className={styles.left}>
-                                    {cartDetails.cartItems.map(
-                                        (cartItem: any) => (
-                                            <CartProductCard
-                                                imageUrl={
-                                                    cartItem?.colorImages[
-                                                        cartItem?.cartitem
-                                                            ?.color
-                                                    ][0]
-                                                }
-                                                name={
-                                                    cartItem?.productDetails
-                                                        ?.name
-                                                }
-                                                availableSizes={
-                                                    cartItem?.productDetails
-                                                        ?.size
-                                                }
-                                                description={
-                                                    cartItem?.productDetails
-                                                        ?.productShortDesc
-                                                }
-                                                originalPrice={
-                                                    cartItem?.productDetails
-                                                        ?.price
-                                                }
-                                                sellingPrice={
-                                                    cartItem?.productDetails
-                                                        ?.sellingPrice
-                                                }
-                                                selectedSize={
-                                                    cartItem?.cartitem?.size
-                                                }
-                                                selectedQty={
-                                                    cartItem?.cartitem?.quantity
-                                                }
-                                                product={
-                                                    cartItem?.productDetails
-                                                }
-                                                availableQty={
-                                                    cartItem?.productDetails
-                                                        ?.availableQuantity
-                                                }
-                                                key={
-                                                    cartItem?.productDetails
-                                                        ?._id
-                                                }
-                                                onCartRemove={() => {
-                                                    cart.remove(
-                                                        cartItem?.productDetails
-                                                            ?._id,
-                                                        () => {
-                                                            loaderService.showFullPageLoader();
-                                                            getCartDetails();
-                                                        }
-                                                    );
-                                                }}
-                                                onCartUpdate={() => {
-                                                    loaderService.showFullPageLoader();
-                                                    getCartDetails();
-                                                }}
-                                            />
-                                        )
-                                    )}
+                                    {cart.cart.map((cartItem: any) => (
+                                        <CartProductCard
+                                            id={cartItem._id}
+                                            imageUrl={
+                                                cartItem?.product?.colorImages[
+                                                    cartItem?.color
+                                                ][0]
+                                            }
+                                            name={cartItem?.product?.name}
+                                            availableSizes={
+                                                cartItem?.product?.size
+                                            }
+                                            description={
+                                                cartItem?.product
+                                                    ?.productShortDesc
+                                            }
+                                            originalPrice={
+                                                cartItem?.product?.price
+                                            }
+                                            sellingPrice={
+                                                cartItem?.product?.sellingPrice
+                                            }
+                                            selectedSize={cartItem?.size}
+                                            selectedQty={cartItem?.qty}
+                                            product={cartItem?.product}
+                                            availableQty={
+                                                cartItem?.product
+                                                    ?.availableQuantity
+                                            }
+                                            key={cartItem?._id}
+                                            onCartRemove={() => {
+                                                cart.remove(
+                                                    cartItem?._id,
+                                                    () => {
+                                                        loaderService.showFullPageLoader();
+                                                        getCartDetails();
+                                                    }
+                                                );
+                                            }}
+                                            onCartUpdate={() => {
+                                                loaderService.showFullPageLoader();
+                                                getCartDetails();
+                                            }}
+                                        />
+                                    ))}
                                 </div>
                                 <div className={styles.right}>
                                     <PricingDetails

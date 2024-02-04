@@ -28,7 +28,6 @@ const Header = () => {
 
     const handleKeyDown = (event: any) => {
         if (event.keyCode === 13 && inputValue) {
-            console.log(inputValue);
             navigate(`/products/${inputValue}`);
         }
     };

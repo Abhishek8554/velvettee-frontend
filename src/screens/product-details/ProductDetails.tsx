@@ -10,12 +10,12 @@ import 'react-multi-carousel/lib/styles.css';
 import { HeartIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as SolidHeart } from '@heroicons/react/24/solid';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import useApi from '../../hooks/useApi';
 import useSnackBar from '../../stores/Snackbar';
 import { SnackBarTypes } from '../../enums/SnackBarTypes';
 import useWishlist from '../../stores/Wishlist';
-import useCart from '../../stores/Cart';
+import useCart, { findItemInCart } from '../../stores/Cart';
 
 const CustomRightArrow = ({ onClick }: any) => {
     return (
@@ -41,7 +41,7 @@ export default function ProductDetails() {
     const [product, setProduct] = useState<any>({});
     const [similarProducts, setSimilarProducts] = useState<any[] | null>(null);
     const [sizes, setSizes] = useState<number[] | []>([]);
-
+    const [searchParams] = useSearchParams();
     const params = useParams();
     const api = useApi();
     const wishlist = useWishlist();
@@ -77,7 +77,29 @@ export default function ProductDetails() {
             });
     };
     useEffect(() => {
-        fetchProduct(params.id as string);
+        if (searchParams.size) {
+            const id = searchParams.get('id');
+            if (
+                searchParams.has('from') &&
+                searchParams.get('from') === 'wishlist'
+            ) {
+                // Handle wishlist back here
+            }
+            if (
+                searchParams.has('from') &&
+                searchParams.get('from') === 'cart'
+            ) {
+                const item = findItemInCart(id as string);
+                setProduct(item?.product);
+                setSelectedColor(item?.color as string);
+                setQuantity(item?.qty as number);
+                setSelectedSize(item?.size as number);
+                setCurrentImage(item?.product?.colorImages[item.color][0]);
+                setSizes(item?.product?.size);
+            }
+        } else {
+            fetchProduct(params.id as string);
+        }
     }, []);
     useEffect(() => {
         if (
@@ -92,10 +114,46 @@ export default function ProductDetails() {
     }, [product]);
 
     const onAddToCart = () => {
-        if (cart.cart.find((x) => x.product._id === product?._id)) {
-            cart.remove(product?._id);
+        const foundItem = findItemInCart(undefined, {
+            productId: product?._id,
+            color: selectedColor,
+        });
+        if (foundItem) {
+            if (foundItem.size === selectedSize && foundItem.qty === quantity) {
+                cart.remove(foundItem?._id);
+            } else {
+                cart.updateCartItem(
+                    foundItem?._id,
+                    {
+                        quantity: quantity,
+                        size: selectedSize,
+                    },
+                    (response) => {
+                        snackbar.open(response.data.message);
+                    },
+                    (err) => {
+                        snackbar.open(err.message, SnackBarTypes.DANGER);
+                    }
+                );
+            }
         } else {
             cart.add(product, selectedSize, selectedColor, quantity);
+        }
+    };
+
+    const getButtonName = () => {
+        const foundItem = findItemInCart(undefined, {
+            color: selectedColor,
+            productId: product?._id,
+        });
+        if (foundItem) {
+            if (foundItem.size === selectedSize && foundItem.qty === quantity) {
+                return 'REMOVE FROM CART';
+            } else {
+                return 'UPDATE CART';
+            }
+        } else {
+            return 'ADD TO CART';
         }
     };
 
@@ -363,14 +421,7 @@ export default function ProductDetails() {
                         <div className="action-buttons flex mb-8">
                             <div className="w-fit mr-3">
                                 <Button
-                                    text={
-                                        cart.cart.find(
-                                            (x) =>
-                                                x.product._id === product?._id
-                                        )
-                                            ? 'REMOVE FROM CART'
-                                            : 'ADD TO CART'
-                                    }
+                                    text={getButtonName()}
                                     className="font-bold"
                                     PrefixIcon={ShoppingCartIcon}
                                     onClick={onAddToCart}
