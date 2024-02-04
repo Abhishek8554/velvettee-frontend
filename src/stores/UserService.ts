@@ -197,7 +197,6 @@ const useUserService = create<IUser>()((set) => {
         // TODO: Integrate razor pay here
         saveCard(cardDetails, successCallBack, errorCallback) {
             const authRef = useAuthStore.getState();
-            console.log(cardDetails);
             const formattedCardData = {
                 cardNumber: cardDetails.cardNumber,
                 name: cardDetails.name,

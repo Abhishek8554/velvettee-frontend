@@ -7,7 +7,6 @@ import styles from './Wishlist.module.scss';
 import Button from '../../components/Button';
 const Wishlist = () => {
     const wishlist = useWishlist();
-    console.log(wishlist.wishlist);
     const navigate = useNavigate();
     return (
         <>

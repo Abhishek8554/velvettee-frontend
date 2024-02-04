@@ -13,14 +13,12 @@ import { useState } from 'react';
 import { Menu, MenuItem } from '@mui/material';
 import useCart from '../../stores/Cart';
 import useWishlist from '../../stores/Wishlist';
-import useApi from '../../hooks/useApi';
-import ApiUrls from '../../constants/ApiUrls';
-import useAuthStore from '../../stores/Auth';
 import { AxiosResponse } from 'axios';
 // import useCart from '../../stores/Cart';
 import { Link } from 'react-router-dom';
 
 interface IProps {
+    id: string;
     imageUrl: string;
     name: string;
     description: string;
@@ -40,8 +38,6 @@ const CartProductCard = (props: IProps) => {
     // const cart = useCart();
     const wishlist = useWishlist();
     const cart = useCart();
-    const auth = useAuthStore();
-    const api = useApi({ withAuth: true });
     const [selectedSize, setSelectedSize] = useState(props.selectedSize);
     const [selectedQty, setSelectedQty] = useState(props.selectedQty);
     const quantitlyOptions = [...new Array(props.availableQty).keys()].map(
@@ -72,12 +68,10 @@ const CartProductCard = (props: IProps) => {
         if (name === 'qty') {
             updates['quantity'] = value;
         }
-        api.put(ApiUrls.CART_UPDATE_PRODUCTS, {
-            userId: auth.user?._id,
-            productId: props?.product?._id,
-            updates: updates,
-        })
-            .then((response) => {
+        cart.updateCartItem(
+            props.id,
+            updates,
+            (response) => {
                 if (name === 'size') {
                     setSelectedSize(value);
                 } else {
@@ -86,13 +80,16 @@ const CartProductCard = (props: IProps) => {
                 if (props.onCartUpdate) {
                     props.onCartUpdate(response);
                 }
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+            },
+            () => {}
+        );
     };
     return (
-        <Link to={`/product-detail/${props.product._id}`}>
+        <Link
+            to={`/product-detail/${props.product._id}?from=${
+                props.isWishlistScreen ? 'wishlist' : 'cart'
+            }&id=${props.id}`}
+        >
             <div className={styles.wrapper}>
                 <div className={styles.left}>
                     <img src={props?.imageUrl} />
@@ -208,7 +205,6 @@ const CartProductCard = (props: IProps) => {
                                 if (props.isWishlistScreen) {
                                     wishlist.remove(props.product._id);
                                 } else {
-                                    console.log(props.product._id);
                                     props.onCartRemove();
                                 }
                             }}
@@ -223,12 +219,6 @@ const CartProductCard = (props: IProps) => {
                                       )
                                         ? 'Remove from Wishlist'
                                         : 'Add to Wishlist'
-                                    : cart.cart.find(
-                                          (x: any) =>
-                                              x.product._id ===
-                                              props.product._id
-                                      )
-                                    ? 'Remove from Cart'
                                     : 'Add to Cart'
                             }
                             type={ButtonTypes.TEXT}
@@ -253,24 +243,13 @@ const CartProductCard = (props: IProps) => {
                                         wishlist.add(props.product);
                                     }
                                 } else {
-                                    console.log(props.product);
-                                    if (
-                                        cart.cart.find(
-                                            (x) =>
-                                                x.product._id ===
-                                                props.product._id
-                                        )
-                                    ) {
-                                        cart.remove(props.product._id);
-                                    } else {
-                                        cart.add(
-                                            props.product,
-                                            props.product.size[0],
-                                            props.product.colors[0],
-                                            1
-                                        );
-                                        wishlist.remove(props.product._id);
-                                    }
+                                    cart.add(
+                                        props.product,
+                                        props.product.size[0],
+                                        props.product.colors[0],
+                                        1
+                                    );
+                                    wishlist.remove(props.product._id);
                                 }
                             }}
                         />
