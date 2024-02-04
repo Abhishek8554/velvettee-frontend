@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 const LandingPage = () => {
     return (
         <div className={styles.wrapper}>
-            <Header showLogout={true} />
+            <Header />
             <section className={styles.carousel_container}>
                 <Carousel
                     infiniteLoop
@@ -77,6 +77,7 @@ const LandingPage = () => {
                             sellingPrice={100}
                             productDescription="Detail of product1: Lorem Ipsum Lorem Ipsum"
                             productName="Shirt"
+                            product={{}}
                         />
                     </Link>
                     <ProductCard
@@ -85,20 +86,13 @@ const LandingPage = () => {
                         originalPrice={1000}
                         sellingPrice={100}
                         productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
+                        product={{}}
                         productName="Shirt"
                     />
                     <ProductCard
                         id="1"
                         imageUrl="/public/product.jpeg"
-                        originalPrice={1000}
-                        sellingPrice={100}
-                        productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
-                        productName="Shirt"
-
-                    />
-                    <ProductCard
-                        id="1"
-                        imageUrl="/public/product.jpeg"
+                        product={{}}
                         originalPrice={1000}
                         sellingPrice={100}
                         productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
@@ -106,6 +100,7 @@ const LandingPage = () => {
                     />
                     <ProductCard
                         id="1"
+                        product={{}}
                         imageUrl="/public/product.jpeg"
                         originalPrice={1000}
                         sellingPrice={100}
@@ -114,6 +109,7 @@ const LandingPage = () => {
                     />
                     <ProductCard
                         id="1"
+                        product={{}}
                         imageUrl="/public/product.jpeg"
                         originalPrice={1000}
                         sellingPrice={100}
@@ -122,14 +118,7 @@ const LandingPage = () => {
                     />
                     <ProductCard
                         id="1"
-                        imageUrl="/public/product.jpeg"
-                        originalPrice={1000}
-                        sellingPrice={100}
-                        productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
-                        productName="Shirt"
-                    />
-                    <ProductCard
-                        id="1"
+                        product={{}}
                         imageUrl="/public/product.jpeg"
                         originalPrice={1000}
                         sellingPrice={100}
@@ -139,6 +128,7 @@ const LandingPage = () => {
                     <ProductCard
                         id="1"
                         imageUrl="/public/product.jpeg"
+                        product={{}}
                         originalPrice={1000}
                         sellingPrice={100}
                         productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
@@ -146,6 +136,25 @@ const LandingPage = () => {
                     />
                     <ProductCard
                         id="1"
+                        imageUrl="/public/product.jpeg"
+                        product={{}}
+                        originalPrice={1000}
+                        sellingPrice={100}
+                        productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
+                        productName="Shirt"
+                    />
+                    <ProductCard
+                        id="1"
+                        product={{}}
+                        imageUrl="/public/product.jpeg"
+                        originalPrice={1000}
+                        sellingPrice={100}
+                        productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
+                        productName="Shirt"
+                    />
+                    <ProductCard
+                        id="1"
+                        product={{}}
                         imageUrl="/public/product.jpeg"
                         originalPrice={1000}
                         sellingPrice={100}
@@ -155,6 +164,7 @@ const LandingPage = () => {
                     <ProductCard
                         id="1"
                         imageUrl="/public/product.jpeg"
+                        product={{}}
                         originalPrice={1000}
                         sellingPrice={100}
                         productDescription="Detail of product: Lorem Ipsum Lorem Ipsum"
@@ -162,6 +172,7 @@ const LandingPage = () => {
                     />
                     <ProductCard
                         id="1"
+                        product={{}}
                         imageUrl="/public/product.jpeg"
                         originalPrice={1000}
                         sellingPrice={100}

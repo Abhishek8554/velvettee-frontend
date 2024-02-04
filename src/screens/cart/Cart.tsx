@@ -257,7 +257,7 @@ const Cart = () => {
         if (currentlyEditingAddress) {
             userService.updateAddress(
                 values,
-                currentlyEditingAddress?._id,
+                (currentlyEditingAddress as any)?._id,
                 (response) => {
                     setAddNewAddress(false);
                     setAddresses(response.data.user.addresses);
@@ -659,11 +659,14 @@ const Cart = () => {
                                     {addresses && addresses.length
                                         ? addresses?.map((address: any) => (
                                               <>
-                                                  {currentlyEditingAddress?._id !==
-                                                      address?._id && (
+                                                  {(
+                                                      currentlyEditingAddress as any
+                                                  )?._id !== address?._id && (
                                                       <div
                                                           className={
-                                                              selectedAddress?._id ===
+                                                              (
+                                                                  selectedAddress as any
+                                                              )?._id ===
                                                               address?._id
                                                                   ? styles.selected_address
                                                                   : ''
@@ -710,7 +713,10 @@ const Cart = () => {
                                                                       id,
                                                                       () => {
                                                                           if (
-                                                                              selectedAddress?._id ===
+                                                                              (
+                                                                                  selectedAddress as any
+                                                                              )
+                                                                                  ?._id ===
                                                                               id
                                                                           ) {
                                                                               setSelectedAddress(

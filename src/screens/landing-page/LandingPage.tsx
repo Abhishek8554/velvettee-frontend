@@ -161,6 +161,7 @@ const LandingPage = () => {
                                 sellingPrice={product.sellingPrice}
                                 productDescription={product.productDescription}
                                 productName={product.productName}
+                                product={product}
                             />
                         </Link>
                     ))}
