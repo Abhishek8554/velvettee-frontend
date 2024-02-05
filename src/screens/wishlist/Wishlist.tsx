@@ -15,6 +15,7 @@ const Wishlist = () => {
                 <div className={styles.wrapper}>
                     {wishlist.wishlist.map((product) => (
                         <CartProductCard
+                            id={product?._id}
                             imageUrl={
                                 product?.colorImages[product?.colors[0]]
                                     ? product?.colorImages[
