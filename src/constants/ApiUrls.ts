@@ -21,4 +21,5 @@ export default class ApiUrls {
     static PLACEORDER = '/order/addOrder';
     static ADD_TO_CART = '/add-to-cart/{productId}';
     static REMOVE_FROM_CART = '/remove-from-cart/{userId}/remove/{cartItemId}';
+    static GET_CITY_BY_PINCODE = '/pincode/getCityByPincode/{pinCode}';
 }

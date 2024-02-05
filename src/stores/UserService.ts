@@ -140,6 +140,8 @@ const useUserService = create<IUser>()((set) => {
                 IsHome: address.saveAs === 'Home' ? true : false,
                 IsWork: address.saveAs === 'Work' ? true : false,
                 IsDefault: address.markDefault,
+                // Default for now.. will be changed in the future
+                countrycode: '+91',
             };
             api.put(
                 ApiUrls.ADD_ADDRESS.replace(

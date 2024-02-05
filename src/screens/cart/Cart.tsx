@@ -7,9 +7,9 @@ import styles from './Cart.module.scss';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
 import { Link, useNavigate } from 'react-router-dom';
 import ProductCard from '../../components/product-card/ProductCard';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Footer from '../../components/footer/Footer';
-import { ErrorMessage, Field, Formik, Form } from 'formik';
+import { ErrorMessage, Field, Formik, Form, FormikProps } from 'formik';
 import * as Yup from 'yup';
 import useCart from '../../stores/Cart';
 import useUserService from '../../stores/UserService';
@@ -17,6 +17,8 @@ import useAuthStore, { IUserAddress } from '../../stores/Auth';
 import useSnackBar from '../../stores/Snackbar';
 import useLoader from '../../stores/FullPageLoader';
 import { SnackBarTypes } from '../../enums/SnackBarTypes';
+import useApi from '../../hooks/useApi';
+import ApiUrls from '../../constants/ApiUrls';
 enum CartSteps {
     CART,
     ADDRESS,
@@ -184,12 +186,25 @@ const PricingDetails = (props: {
     );
 };
 
+interface IAddressFormValues {
+    name: string;
+    mobileNumber: number | string;
+    pinCode: number | string;
+    address: string;
+    town: string;
+    city: string;
+    state: string;
+    saveAs: 'Home' | 'Work';
+    markDefault: boolean;
+}
+
 const Cart = () => {
     const cart = useCart();
     const userService = useUserService();
     const auth = useAuthStore();
     const snackBarService = useSnackBar();
     const loaderService = useLoader();
+    const api = useApi({ withAuth: true });
     const cardNumberRegExp =
         /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$/;
     const cvvRegExp = /^[0-9]{3,4}$/;
@@ -199,10 +214,12 @@ const Cart = () => {
     const [addresses, setAddresses] = useState<any>(undefined);
     const [addNewAddress, setAddNewAddress] = useState(false);
     const [selectedAddress, setSelectedAddress] = useState(undefined);
+    useState<Map<string, boolean>>();
     const [currentlyEditingAddress, setCurrentlyEditingAddress] =
         useState(undefined);
+    const addressFormRef = useRef<FormikProps<IAddressFormValues>>();
     const navigate = useNavigate();
-    const addressInitialValues = {
+    const addressInitialValues: IAddressFormValues = {
         name: '',
         mobileNumber: '',
         pinCode: '',
@@ -328,6 +345,40 @@ const Cart = () => {
         );
     };
 
+    const afterPinCode = () => {
+        const formValues = addressFormRef.current!.values;
+        if (formValues.pinCode) {
+            loaderService.showFullPageLoader();
+            api.get(
+                ApiUrls.GET_CITY_BY_PINCODE.replace(
+                    '{pinCode}',
+                    formValues.pinCode.toString()
+                )
+            )
+                .then((response) => {
+                    addressFormRef.current?.setFieldValue(
+                        'city',
+                        response.data?.city
+                    );
+                    addressFormRef.current?.setFieldValue(
+                        'state',
+                        response.data?.state
+                    );
+
+                    addressFormRef.current?.setFieldValue(
+                        'town',
+                        response.data?.town
+                    );
+
+                    loaderService.hideFullPageLoader();
+                })
+                .catch((err) => {
+                    snackBarService.open(err.message, SnackBarTypes.DANGER);
+                    loaderService.hideFullPageLoader();
+                });
+        }
+    };
+
     const getCartDetails = () => {
         cart.getCartDetails(
             auth.user?._id as string,
@@ -403,6 +454,9 @@ const Cart = () => {
                             className={styles.stepper_item}
                             onClick={() => {
                                 setCurrentSteps(CartSteps.CART);
+                                setInitialValues(
+                                    addressFormRef.current!.values
+                                );
                             }}
                         >
                             <div
@@ -725,6 +779,7 @@ const Cart = () => {
                                             enableReinitialize
                                             initialValues={initialValues}
                                             validationSchema={validationSchema}
+                                            innerRef={addressFormRef as any}
                                             onSubmit={handleSubmit}
                                         >
                                             {({ errors }) => (
@@ -785,6 +840,9 @@ const Cart = () => {
                                                             type="text"
                                                             id="pinCode"
                                                             name="pinCode"
+                                                            onBlur={
+                                                                afterPinCode
+                                                            }
                                                             placeholder="Pin Code*"
                                                             className={`mt-1 p-2 w-full border rounded-md ve-field transparent  ${
                                                                 errors.pinCode
