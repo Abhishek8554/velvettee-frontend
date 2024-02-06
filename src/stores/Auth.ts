@@ -37,23 +37,13 @@ interface AuthState {
 const useAuthStore = create<AuthState>()(
     persist(
         (set) => {
-            const api = useApi({ withAuth: true });
             return {
                 token: undefined,
                 setToken: (token: string | undefined) => set({ token }),
                 user: undefined,
                 setUser: (user: IUserData | undefined) => {
                     const userService = useUserService.getState();
-                    const wishlist = useWishlist.getState();
-                    if (user?.products?.length) {
-                        user.products.map((id: string) => {
-                            api.get(`/products/getproductbyid/${id}`).then(
-                                (response) => {
-                                    wishlist.add(response.data);
-                                }
-                            );
-                        });
-                    }
+
                     userService.setUserData(user);
                     return set({
                         user,
