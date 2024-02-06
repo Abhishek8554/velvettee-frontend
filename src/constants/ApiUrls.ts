@@ -22,4 +22,10 @@ export default class ApiUrls {
     static ADD_TO_CART = '/add-to-cart/{productId}';
     static REMOVE_FROM_CART = '/remove-from-cart/{userId}/remove/{cartItemId}';
     static GET_CITY_BY_PINCODE = '/pincode/getCityByPincode/{pinCode}';
+
+    // Wishlist
+    static ADD_TO_WISHLIST = '/add-to-wishlist/{productId}';
+    static DELETE_WISHLIST_ITEM =
+        '/remove-from-wishlist/{userId}/remove/{wishlistId}';
+    static GET_WISHLIST_DETAILS = '/wishlist/getWishListItems/{userId}';
 }

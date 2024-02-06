@@ -47,8 +47,11 @@ export default function Login() {
                 navigate('/');
             },
             (error) => {
-                snackBarService.open(error.message, SnackBarTypes.DANGER);
                 loaderService.hideFullPageLoader();
+                snackBarService.open(
+                    error.message ? error.messgae : error,
+                    SnackBarTypes.DANGER
+                );
             }
         );
     };

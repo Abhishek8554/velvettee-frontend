@@ -14,7 +14,7 @@ import { Link, useParams, useSearchParams } from 'react-router-dom';
 import useApi from '../../hooks/useApi';
 import useSnackBar from '../../stores/Snackbar';
 import { SnackBarTypes } from '../../enums/SnackBarTypes';
-import useWishlist from '../../stores/Wishlist';
+import useWishlist, { findItemInWishlist } from '../../stores/Wishlist';
 import useCart, { findItemInCart } from '../../stores/Cart';
 import useLoader from '../../stores/FullPageLoader';
 
@@ -90,7 +90,11 @@ export default function ProductDetails() {
                 searchParams.has('from') &&
                 searchParams.get('from') === 'wishlist'
             ) {
-                // Handle wishlist back here
+                const item = findItemInWishlist(id as string);
+                setProduct(item?.product);
+                setSelectedColor(item?.color as string);
+                setCurrentImage(item?.product?.colorImages[item.color][0]);
+                loaderService.hideFullPageLoader();
             }
             if (
                 searchParams.has('from') &&
@@ -166,10 +170,14 @@ export default function ProductDetails() {
     };
 
     const onWishlist = () => {
-        if (wishlist.wishlist.find((x) => x._id === product?._id)) {
-            wishlist.remove(product?._id);
+        const foundProduct = findItemInWishlist(undefined, {
+            color: selectedColor,
+            productId: product?._id,
+        });
+        if (foundProduct) {
+            wishlist.remove(foundProduct._id);
         } else {
-            wishlist.add(product);
+            wishlist.add(product, selectedColor);
         }
     };
     const onQuantity = (type: 'increment' | 'decrement') => {
@@ -456,21 +464,28 @@ export default function ProductDetails() {
                                     </div>
                                     <div className="w-fit">
                                         <Button
-                                            text="WISHLIST"
+                                            text={
+                                                findItemInWishlist(undefined, {
+                                                    color: selectedColor,
+                                                    productId: product?._id,
+                                                })
+                                                    ? 'WISHLISTED'
+                                                    : 'WISHLIST'
+                                            }
                                             type={
-                                                wishlist.wishlist.find(
-                                                    (x) =>
-                                                        x._id === product?._id
-                                                )
+                                                findItemInWishlist(undefined, {
+                                                    color: selectedColor,
+                                                    productId: product?._id,
+                                                })
                                                     ? null
                                                     : ButtonTypes.OUTLINE
                                             }
                                             className="font-bold bg-white border-0  "
                                             PrefixIcon={
-                                                wishlist.wishlist.find(
-                                                    (x) =>
-                                                        x._id === product?._id
-                                                )
+                                                findItemInWishlist(undefined, {
+                                                    color: selectedColor,
+                                                    productId: product?._id,
+                                                })
                                                     ? SolidHeart
                                                     : HeartIcon
                                             }

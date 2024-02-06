@@ -516,6 +516,7 @@ const Cart = () => {
                                     {cart.cart.map((cartItem: any) => (
                                         <CartProductCard
                                             id={cartItem._id}
+                                            selectedColor={cartItem?.color}
                                             imageUrl={
                                                 cartItem?.product?.colorImages[
                                                     cartItem?.color

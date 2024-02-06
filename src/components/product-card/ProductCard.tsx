@@ -2,7 +2,7 @@
 import { HeartIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
 import styles from './ProductCard.module.scss';
-import useWishlist from '../../stores/Wishlist';
+import useWishlist, { findItemInWishlist } from '../../stores/Wishlist';
 type Props = {
     id: string;
     imageUrl?: string;
@@ -16,10 +16,14 @@ type Props = {
 const ProductCard = (props: Props) => {
     const wishlist = useWishlist();
     const addToWishlist = (product: any) => {
-        wishlist.add(product);
+        wishlist.add(product, product?.colors[0]);
     };
     const removeFromWishlist = (id: string) => {
-        wishlist.remove(id);
+        const foundItem = findItemInWishlist(undefined, {
+            color: props.product?.colors[0],
+            productId: id,
+        });
+        wishlist.remove(foundItem?._id as string);
     };
 
     return (
@@ -28,7 +32,12 @@ const ProductCard = (props: Props) => {
                 <img src={props.imageUrl} alt={props.productName} />
                 <div className={styles.wishlist_icon}>
                     {' '}
-                    {wishlist.wishlist.find((x) => x._id === props.id) ? (
+                    {props.product &&
+                    props.product.colors &&
+                    findItemInWishlist(undefined, {
+                        color: props.product?.colors[0],
+                        productId: props.product?._id,
+                    }) ? (
                         <HeartSolid
                             onClick={(e: any) => {
                                 e.preventDefault();
