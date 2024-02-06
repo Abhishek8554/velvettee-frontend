@@ -1,7 +1,5 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import useWishlist from './Wishlist';
-import useApi from '../hooks/useApi';
 import useUserService from './UserService';
 
 export interface IUserAddress {
