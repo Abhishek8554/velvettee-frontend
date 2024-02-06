@@ -36,118 +36,25 @@ const Header = () => {
     };
     return (
         <>
-            <div className={`${styles.wrapper} ${styles.desktop}`}>
-                <Link to={'/'}>
-                    <div className={styles.icon_container}>
-                        <i
-                            dangerouslySetInnerHTML={{
-                                __html: Icon.companyLogo,
-                            }}
-                        ></i>
-                    </div>
-                </Link>
-                <div className={styles.search_container}>
-                    <span>
-                        <MagnifyingGlassIcon className=" color-sub-text" />
-                    </span>
-                    <input
-                        placeholder="Search your product"
-                        type="text"
-                        className={styles.search_input}
-                        onKeyDown={handleKeyDown}
-                        onInput={handleInputChange}
-                    />
+            <div className={styles.wrapper}>
+                <div className={styles.hamburger_lines}>
+                    <span className={`${styles.line} ${styles.line1}`}></span>
+                    <span className={`${styles.line} ${styles.line2}`}></span>
+                    <span className={`${styles.line} ${styles.line3}`}></span>
                 </div>
-                {/* Remember to add ! */}
-                {!authStore.token ? (
-                    <Link to={'/signup'} className={styles.buttons_container}>
-                        <Button
-                            text="Login / Signup"
-                            type={ButtonTypes.OUTLINE}
-                            className={styles.login_btn}
-                        />
-                    </Link>
-                ) : (
-                    <div className={styles.buttons_container}>
-                        <div onClick={logout} className={styles.button_icon}>
-                            <UserIcon />
-                        </div>
-                        <Link
-                            to={'/wishlist'}
-                            className={`${styles.button_icon} ${styles.wishlist}`}
-                        >
-                            <HeartIcon />
-                            {wishlist.wishlist.length ? (
-                                <div className={styles.notification}></div>
-                            ) : (
-                                ''
-                            )}
-                        </Link>
-                        <Link
-                            to="/cart"
-                            className={`${styles.button_icon} ${styles.cart}`}
-                        >
-                            <ShoppingCartIcon />
-                            {cart.cart.length ? (
-                                <div className={styles.notification}></div>
-                            ) : (
-                                ''
-                            )}
-                        </Link>
-                    </div>
-                )}
-            </div>
-            <div className={`${styles.wrapper} ${styles.mobile}`}>
-                <div className={styles.link_action_container}>
-                    <Link to={'/'}>
-                        <div className={styles.icon_container}>
-                            <i
-                                dangerouslySetInnerHTML={{
-                                    __html: Icon.companyLogo,
-                                }}
-                            ></i>
-                        </div>
-                    </Link>
-                    {/* Remember to add ! */}
-                    {!authStore.token ? (
-                        <Link
-                            to={'/signup'}
-                            className={styles.buttons_container}
-                        >
-                            <Button
-                                text="Login / Signup"
-                                className={styles.login_btn}
-                                type={ButtonTypes.OUTLINE}
-                            />
-                        </Link>
-                    ) : (
-                        <div className={styles.buttons_container}>
-                            <div
-                                onClick={logout}
-                                className={styles.button_icon}
-                            >
-                                <UserIcon />
-                            </div>
-                            <div className={styles.button_icon}>
-                                <HeartIcon />
-                            </div>
-                            <div className={styles.button_icon}>
-                                <ShoppingCartIcon />
-                            </div>
-                        </div>
-                    )}
+                <div className={styles.logo_container}>
+                    <img src="white-logo.svg" alt="Velvettee" />
                 </div>
-                <div
-                    className={`${styles.search_container} ${styles.search_container_mobile}`}
-                >
-                    <span>
-                        <MagnifyingGlassIcon className=" color-sub-text" />
-                    </span>
-                    <input
-                        placeholder="Search your product"
-                        type="text"
-                        className={styles.search_input}
-                    />
+                <div className={styles.actions}>
+                    <div className={styles.action}>
+                        <MagnifyingGlassIcon />
+                    </div>
+                    <div className={styles.action}>
+                        <ShoppingCartIcon />
+                    </div>
+                    <div className={styles.action}>
+                        <UserIcon />
+                    </div>
                 </div>
             </div>
         </>

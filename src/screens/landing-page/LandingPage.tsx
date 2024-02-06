@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Carousel } from 'react-responsive-carousel';
 import Header from '../../components/header/Header';
 import styles from './LandingPage.module.scss';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -8,6 +7,7 @@ import Footer from '../../components/footer/Footer';
 import { ChevronLeftIcon } from '@heroicons/react/20/solid';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
+import Carousel from '../../components/carousel/Carousel';
 
 const LandingPage = () => {
     const products = [
@@ -96,49 +96,7 @@ const LandingPage = () => {
         <div className={styles.wrapper}>
             <Header />
             <section className={styles.carousel_container}>
-                <Carousel
-                    infiniteLoop
-                    autoPlay
-                    emulateTouch
-                    swipeable
-                    showThumbs={false}
-                    className={styles.carousel}
-                    showArrows
-                    showStatus={false}
-                    renderArrowPrev={(clickHandler) => {
-                        return (
-                            <span
-                                onClick={clickHandler}
-                                className={`${styles.arrow} ${styles.prev}`}
-                            >
-                                <ChevronLeftIcon />
-                            </span>
-                        );
-                    }}
-                    renderArrowNext={(clickHandler) => {
-                        return (
-                            <span
-                                onClick={clickHandler}
-                                className={`${styles.arrow} ${styles.next}`}
-                            >
-                                <ChevronLeftIcon />
-                            </span>
-                        );
-                    }}
-                >
-                    <div className={styles.carousel_item}>
-                        <img src="carouselImage.svg" />
-                    </div>
-                    <div className={styles.carousel_item}>
-                        <img src="carouselImage.svg" />
-                    </div>
-                    <div className={styles.carousel_item}>
-                        <img src="carouselImage.svg" />
-                    </div>
-                    <div className={styles.carousel_item}>
-                        <img src="carouselImage.svg" />
-                    </div>
-                </Carousel>
+                <Carousel />
             </section>
             <section className={styles.top_deals_container}>
                 <div className={styles.explore_all}>
