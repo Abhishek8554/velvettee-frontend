@@ -55,6 +55,8 @@ const CartProductCard = (props: IProps) => {
             setSizeAnchorEl(event.currentTarget);
         if (event.target.id === 'qty-btn') setQtyAnchorEl(event.currentTarget);
     };
+    const [removeBtnLoader, setRemoveBtnLoader] = useState(false);
+    const [moveBtnLoader, setMoveBtnLoader] = useState(false);
     const handleClose = (event: any) => {
         event.stopPropagation();
         event.preventDefault();
@@ -204,11 +206,21 @@ const CartProductCard = (props: IProps) => {
                             text="Remove"
                             type={ButtonTypes.TEXT}
                             PrefixIcon={TrashIcon}
+                            loader={removeBtnLoader}
                             stopPropogation
                             preventDefault
                             onClick={() => {
+                                setRemoveBtnLoader(true);
                                 if (props.isWishlistScreen) {
-                                    wishlist.remove(props.id);
+                                    wishlist.remove(
+                                        props.id,
+                                        () => {
+                                            setRemoveBtnLoader(false);
+                                        },
+                                        () => {
+                                            setMoveBtnLoader(false);
+                                        }
+                                    );
                                 } else {
                                     props.onCartRemove();
                                 }
@@ -217,6 +229,7 @@ const CartProductCard = (props: IProps) => {
                         <Button
                             stopPropogation
                             preventDefault
+                            loader={moveBtnLoader}
                             text={
                                 !props.isWishlistScreen
                                     ? findItemInWishlist(undefined, {
@@ -239,6 +252,7 @@ const CartProductCard = (props: IProps) => {
                                     : ShoppingCartIcon
                             }
                             onClick={() => {
+                                setMoveBtnLoader(true);
                                 if (!props.isWishlistScreen) {
                                     if (
                                         findItemInWishlist(undefined, {
@@ -250,12 +264,24 @@ const CartProductCard = (props: IProps) => {
                                             findItemInWishlist(undefined, {
                                                 color: props.selectedColor!,
                                                 productId: props.product?._id,
-                                            })?._id as string
+                                            })?._id as string,
+                                            () => {
+                                                setMoveBtnLoader(false);
+                                            },
+                                            () => {
+                                                setMoveBtnLoader(false);
+                                            }
                                         );
                                     } else {
                                         wishlist.add(
                                             props.product,
-                                            props.selectedColor!
+                                            props.selectedColor!,
+                                            () => {
+                                                setMoveBtnLoader(false);
+                                            },
+                                            () => {
+                                                setMoveBtnLoader(false);
+                                            }
                                         );
                                         cart.remove(props.id, () => {});
                                     }
@@ -264,7 +290,13 @@ const CartProductCard = (props: IProps) => {
                                         props.product,
                                         selectedSize,
                                         props.selectedColor as string,
-                                        selectedQty
+                                        selectedQty,
+                                        () => {
+                                            setMoveBtnLoader(false);
+                                        },
+                                        () => {
+                                            setMoveBtnLoader(false);
+                                        }
                                     );
                                     wishlist.remove(props.id);
                                 }

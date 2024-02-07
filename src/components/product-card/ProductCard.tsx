@@ -3,6 +3,8 @@ import { HeartIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
 import styles from './ProductCard.module.scss';
 import useWishlist, { findItemInWishlist } from '../../stores/Wishlist';
+import { useState } from 'react';
+import Spinner from '../Spinner';
 type Props = {
     id: string;
     imageUrl?: string;
@@ -15,15 +17,35 @@ type Props = {
 
 const ProductCard = (props: Props) => {
     const wishlist = useWishlist();
+    const [wishlistLoader, setWishlistLoader] = useState(false);
     const addToWishlist = (product: any) => {
-        wishlist.add(product, product?.colors[0]);
+        setWishlistLoader(true);
+        wishlist.add(
+            product,
+            product?.colors[0],
+            () => {
+                setWishlistLoader(false);
+            },
+            () => {
+                setWishlistLoader(false);
+            }
+        );
     };
     const removeFromWishlist = (id: string) => {
+        setWishlistLoader(true);
         const foundItem = findItemInWishlist(undefined, {
             color: props.product?.colors[0],
             productId: id,
         });
-        wishlist.remove(foundItem?._id as string);
+        wishlist.remove(
+            foundItem?._id as string,
+            () => {
+                setWishlistLoader(false);
+            },
+            () => {
+                setWishlistLoader(false);
+            }
+        );
     };
 
     return (
@@ -31,13 +53,16 @@ const ProductCard = (props: Props) => {
             <div className={styles.image_container}>
                 <img src={props.imageUrl} alt={props.productName} />
                 <div className={styles.wishlist_icon}>
-                    {' '}
-                    {props.product &&
-                    props.product.colors &&
-                    findItemInWishlist(undefined, {
-                        color: props.product?.colors[0],
-                        productId: props.product?._id,
-                    }) ? (
+                    {wishlistLoader ? (
+                        <div className="p-0.5 color-primary flex justify-center .items-center ">
+                            <Spinner />
+                        </div>
+                    ) : props.product &&
+                      props.product.colors &&
+                      findItemInWishlist(undefined, {
+                          color: props.product?.colors[0],
+                          productId: props.product?._id,
+                      }) ? (
                         <HeartSolid
                             onClick={(e: any) => {
                                 e.preventDefault();

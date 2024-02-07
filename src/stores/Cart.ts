@@ -27,7 +27,14 @@ interface ICart {
         }[]
     ) => void;
 
-    add: (product: any, size: number, color: string, qty: number) => void;
+    add: (
+        product: any,
+        size: number,
+        color: string,
+        qty: number,
+        successCallBack?: (response: AxiosResponse) => void,
+        errorCallback?: (error: any) => void
+    ) => void;
     remove: (
         id: string,
         successCallBack?: (response: AxiosResponse) => void
@@ -86,7 +93,14 @@ const useCart = create<ICart>()((set) => {
                 );
             });
         },
-        add: (product: any, size: number, color: string, qty: number) =>
+        add: (
+            product: any,
+            size: number,
+            color: string,
+            qty: number,
+            successCallBack,
+            errorCallback
+        ) =>
             set((state) => {
                 const snackBarService = useSnackBar.getState();
                 const authStore = useAuthStore.getState();
@@ -101,6 +115,9 @@ const useCart = create<ICart>()((set) => {
                         }
                     )
                         .then((respone) => {
+                            if (successCallBack) {
+                                successCallBack(respone);
+                            }
                             const _this = useCart.getState();
                             _this._addToCart(
                                 product,
@@ -111,6 +128,9 @@ const useCart = create<ICart>()((set) => {
                             );
                         })
                         .catch((err: any) => {
+                            if (errorCallback) {
+                                errorCallback(err);
+                            }
                             snackBarService.open(
                                 err.message,
                                 SnackBarTypes.DANGER

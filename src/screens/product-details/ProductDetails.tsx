@@ -126,13 +126,21 @@ export default function ProductDetails() {
     }, [product]);
 
     const onAddToCart = () => {
+        loaderService.showFullPageLoader();
         const foundItem = findItemInCart(undefined, {
             productId: product?._id,
             color: selectedColor,
         });
         if (foundItem) {
             if (foundItem.size === selectedSize && foundItem.qty === quantity) {
-                cart.remove(foundItem?._id);
+                try {
+                    cart.remove(foundItem?._id, () => {
+                        loaderService.hideFullPageLoader();
+                    });
+                } catch (error) {
+                    loaderService.hideFullPageLoader();
+                    snackbar.open('Something went wrong', SnackBarTypes.DANGER);
+                }
             } else {
                 cart.updateCartItem(
                     foundItem?._id,
@@ -142,14 +150,18 @@ export default function ProductDetails() {
                     },
                     (response) => {
                         snackbar.open(response.data.message);
+                        loaderService.hideFullPageLoader();
                     },
                     (err) => {
                         snackbar.open(err.message, SnackBarTypes.DANGER);
+                        loaderService.hideFullPageLoader();
                     }
                 );
             }
         } else {
-            cart.add(product, selectedSize, selectedColor, quantity);
+            cart.add(product, selectedSize, selectedColor, quantity, () => {
+                loaderService.hideFullPageLoader();
+            });
         }
     };
 
@@ -170,14 +182,32 @@ export default function ProductDetails() {
     };
 
     const onWishlist = () => {
+        loaderService.showFullPageLoader();
         const foundProduct = findItemInWishlist(undefined, {
             color: selectedColor,
             productId: product?._id,
         });
         if (foundProduct) {
-            wishlist.remove(foundProduct._id);
+            wishlist.remove(
+                foundProduct._id,
+                () => {
+                    loaderService.hideFullPageLoader();
+                },
+                () => {
+                    loaderService.hideFullPageLoader();
+                }
+            );
         } else {
-            wishlist.add(product, selectedColor);
+            wishlist.add(
+                product,
+                selectedColor,
+                () => {
+                    loaderService.hideFullPageLoader();
+                },
+                () => {
+                    loaderService.hideFullPageLoader();
+                }
+            );
         }
     };
     const onQuantity = (type: 'increment' | 'decrement') => {
@@ -193,7 +223,7 @@ export default function ProductDetails() {
     };
     return (
         <>
-            {product && Object.keys(product).length && (
+            {product && Object.keys(product).length ? (
                 <div className={styles.wrapper}>
                     <Header />
                     <hr />
@@ -597,6 +627,8 @@ export default function ProductDetails() {
                     <hr />
                     <Footer />
                 </div>
+            ) : (
+                ''
             )}
         </>
     );

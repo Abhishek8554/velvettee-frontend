@@ -23,10 +23,16 @@ interface IWishlist {
         }[]
     ) => void;
 
-    add: (product: any, color: string) => void;
+    add: (
+        product: any,
+        color: string,
+        successCallBack?: (response: AxiosResponse) => void,
+        errorCallback?: (error: any) => void
+    ) => void;
     remove: (
         id: string,
-        successCallBack?: (response: AxiosResponse) => void
+        successCallBack?: (response: AxiosResponse) => void,
+        errorCallback?: (error: any) => void
     ) => void;
 
     getWishlistDetails: (
@@ -51,7 +57,7 @@ const useWishlist = create<IWishlist>()((set) => {
                 _this._addToWishlist(item.product, item.color, item.id);
             });
         },
-        add: (product: any, color: string) =>
+        add: (product: any, color: string, successCallBack, errorCallback) =>
             set((state) => {
                 const snackBarService = useSnackBar.getState();
                 const authStore = useAuthStore.getState();
@@ -67,6 +73,9 @@ const useWishlist = create<IWishlist>()((set) => {
                         }
                     )
                         .then((respone) => {
+                            if (successCallBack) {
+                                successCallBack(respone);
+                            }
                             const _this = useWishlist.getState();
                             _this._addToWishlist(
                                 product,
@@ -75,6 +84,9 @@ const useWishlist = create<IWishlist>()((set) => {
                             );
                         })
                         .catch((err: any) => {
+                            if (errorCallback) {
+                                errorCallback(err);
+                            }
                             snackBarService.open(
                                 err.message,
                                 SnackBarTypes.DANGER
@@ -89,7 +101,7 @@ const useWishlist = create<IWishlist>()((set) => {
                     return state;
                 }
             }),
-        remove: (id: string, successCallBack) =>
+        remove: (id: string, successCallBack, errorCallback) =>
             set((state) => {
                 const authStore = useAuthStore.getState();
                 const snackBarService = useSnackBar.getState();
@@ -99,13 +111,19 @@ const useWishlist = create<IWishlist>()((set) => {
                             '{userId}',
                             authStore.user._id
                         ).replace('{wishlistId}', id)
-                    ).then((response) => {
-                        const _this = useWishlist.getState();
-                        _this._removeFromWishlist(id);
-                        if (successCallBack) {
-                            successCallBack(response);
-                        }
-                    });
+                    )
+                        .then((response) => {
+                            const _this = useWishlist.getState();
+                            _this._removeFromWishlist(id);
+                            if (successCallBack) {
+                                successCallBack(response);
+                            }
+                        })
+                        .catch((err: any) => {
+                            if (errorCallback) {
+                                errorCallback(err);
+                            }
+                        });
                     return state;
                 } else {
                     snackBarService.open(
