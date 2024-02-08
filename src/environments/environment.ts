@@ -6,6 +6,6 @@
 // Staging =
 
 export const environment = {
-    baseUrl: 'https://velvettee-backend.onrender.com/',
+    baseUrl: 'https://api.dev.velvettee.com/',
     // baseUrl: 'http://localhost:4001/',
 };
